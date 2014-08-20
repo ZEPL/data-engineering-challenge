@@ -18,7 +18,7 @@ Imagine that your just joined a cool BigData startup wich stores a lot of custom
 Here's what your CLI-based application must do:
 
  1. Your app must accept (via a command-line) a space delimited arbitrary sequence of numbers.
- 1. Your app must parse the given sequence, analize it, calculating at least next statistics:  sum, avg, median, max count. 
+ 1. Your app must parse the given sequence, analyze it, calculating at least next statistics:  sum, avg, median, max, count. 
  1. After that, your application should print results to the standard output, serialized in the human-readable JSON format
 
 
