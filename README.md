@@ -13,15 +13,16 @@ Feel free to email us at moon@nflabs.com if you have any questions about the cha
 
 
 ## Project Description
+Imagine that your just joined a cool BigData startup wich stores a lot of customer data. You are lucky as they are just starting a new project to analyze all this aswome shiny data. They want to be proactive not reactive with their blue-sky thinking on this mission critical project, and believed this to be a win-win situation, harvesting low-hanging fruit with client focused deliverables. You have volonteered do that by writing an application.
 
 Here's what your CLI-based application must do:
 
  1. Your app must accept (via a command-line) a space delimited arbitrary sequence of numbers.
- 1. Your app must parse the given sequence, analize it, calculating at least next statistics:  sum, avg, median, max count.
- 1. After upload, your application should print results in the JSON format
+ 1. Your app must parse the given sequence, analize it, calculating at least next statistics:  sum, avg, median, max count. 
+ 1. After that, your application should print results to the standard output, serialized in the human-readable JSON format
 
 
-Your application should be easy to set up and should run on either Linux or Mac OS X.  It should not require any for-pay software.
+Your application should be easy to set up and should run on either Linux or Mac OS X.  It should not require any for-pay software. It should be well-tested solution and easy-to-extend too, by quickly adding a new customer requirments i.e min function, std-dev, etc.
 
 
 ## Evaluation
