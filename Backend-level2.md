@@ -18,10 +18,10 @@ Imagine that your just joined a cool BigData startup wich stores a lot of custom
 Here's what your system must do:
 
 1. Your system must receive customer data with various json format via http
-1. Your system must change some data to "*"
+1. Your system must change some data to "*" by field name received from the url of `/mask`
 1. Your system must store data into files
 
-If any error occurs while handling data, it returns `fails`
+If any error occurs while handling data, it returns `fails`. Customer and administrator can set the field names to change some data to "*" by requesting POST `/mask` dynamically.
 
 Here's your system's entry point as http server:
 
