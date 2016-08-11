@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 mvnw
 mvnw.cmd
 /target/*
@@ -6,3 +7,18 @@ mvnw.cmd
 /.mvn/*
 /.settings/*
 /data/*
+=======
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+>>>>>>> dbba74df5bc055ec2e301e493c4f140dd118336b
+/target/
