@@ -7,8 +7,8 @@ import com.google.inject.servlet.GuiceFilter;
 import com.ychan.config.AppConfig;
 
 public class App {
+  private static Server server;
   public static void main(String[] args) throws Exception {
-
     if (args.length < 1) {
       // TODO: logger
       System.out.println("Please provide system argument for port number");
@@ -22,8 +22,13 @@ public class App {
       System.out.println("Error : Argument format should be number");
       return;
     }
-    // server configuration
-    Server server = new Server(port);
+
+    init(port);
+  }
+
+  public static void init(final int port) throws Exception { init(port, true); }
+  public static void init(final int port, boolean sync) throws Exception {
+    server = new Server(port);
 
     ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
     contextHandler.setContextPath("/");
@@ -33,6 +38,12 @@ public class App {
     server.setHandler(contextHandler);
 
     server.start();
-    server.join();
+    if(sync) server.join();
+  }
+
+  public void stopServer() throws Exception {
+    // TODO: Exception
+    server.stop();
+    server.destroy();
   }
 }
