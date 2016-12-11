@@ -12,15 +12,11 @@ import com.ychan.dto.Todo;
 public class TodoService{
   private Dao<Todo> dao;
   
-//  @Inject
-//  public TodoService(Dao<Todo> dao) {
-//    this.dao = dao;
-//  }
-
   @Inject
-  public TodoService() {
+  public TodoService(Dao<Todo> dao) {
+    this.dao = dao;
   }
-  
+
   @GET
   public String get() {
     System.out.print("thisis get");

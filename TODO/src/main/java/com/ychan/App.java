@@ -29,7 +29,7 @@ public class App {
     contextHandler.setContextPath("/");
     contextHandler.addEventListener(new TodoServiceConfig());
     contextHandler.addFilter(GuiceFilter.class, "/*", null);
-    contextHandler.addServlet(DefaultServlet.class, "/");
+    contextHandler.addServlet(DefaultServlet.class, "/"); // for 404
     server.setHandler(contextHandler);
 
     server.start();
