@@ -16,22 +16,30 @@ import com.ychan.dto.Todo;
 @Path("/todos")
 public class TodoService implements RestService{
   private Dao<Todo> dao;
+  private TaskService taskService;
   
   @Inject
-  public TodoService(Dao<Todo> dao) {
+  public TodoService(Dao<Todo> dao, TaskService taskService) {
     this.dao = dao;
+    this.taskService = taskService;
+  }
+
+  @GET
+  @Path("{id}/tasks")
+  public Object getTasks(@PathParam("id") String id) {
+    return taskService.get();
+  }
+  
+  @GET
+  @Path("{id}")
+  public Object get(@PathParam("id") String id) {
+    return "get by id";
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public String get() {
+  public Object get() {
     return "get all";
-  }
-
-  @GET
-  @Path("{id}")
-  public String get(@PathParam("id") String id) {
-    return "get by id";
   }
 
   @POST

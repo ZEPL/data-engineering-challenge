@@ -4,7 +4,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import com.google.inject.servlet.GuiceFilter;
-import com.ychan.config.TodoServiceConfig;
+import com.ychan.config.AppConfig;
 
 public class App {
   public static void main(String[] args) throws Exception {
@@ -27,7 +27,7 @@ public class App {
 
     ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
     contextHandler.setContextPath("/");
-    contextHandler.addEventListener(new TodoServiceConfig());
+    contextHandler.addEventListener(new AppConfig());
     contextHandler.addFilter(GuiceFilter.class, "/*", null);
     contextHandler.addServlet(DefaultServlet.class, "/"); // for 404
     server.setHandler(contextHandler);

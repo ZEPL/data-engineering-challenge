@@ -12,8 +12,7 @@ public class TaskService implements RestService{
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Object get() {
-    // TODO Auto-generated method stub
-    return null;
+    return "task/get";
   }
 
   @POST
