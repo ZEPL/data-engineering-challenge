@@ -15,7 +15,7 @@
         <artifactId>exec-maven-plugin</artifactId>
         <version>1.5.0</version>
         <configuration>
-          <mainClass>com.ychan.Server</mainClass>
+          <mainClass>com.ychan.App</mainClass>
         </configuration>
       </plugin>
     </plugins>
@@ -33,11 +33,13 @@
 	  <artifactId>guice</artifactId>
 	  <version>4.1.0</version>
 	</dependency>
+    <!-- https://mvnrepository.com/artifact/com.google.inject.extensions/guice-servlet -->
     <dependency>
-      <groupId>javax.ws.rs</groupId>
-      <artifactId>javax.ws.rs-api</artifactId>
-      <version>2.0</version>
+      <groupId>com.google.inject.extensions</groupId>
+      <artifactId>guice-servlet</artifactId>
+      <version>4.1.0</version>
     </dependency>
+    <!-- Jetty -->
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
@@ -47,6 +49,19 @@
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-servlet</artifactId>
       <version>9.3.14.v20161028</version>
+    </dependency>
+    <!-- Jersey -->
+    <!-- https://mvnrepository.com/artifact/com.sun.jersey/jersey-server -->
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-server</artifactId>
+      <version>1.19.3</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/com.sun.jersey.contribs/jersey-guice -->
+    <dependency>
+      <groupId>com.sun.jersey.contribs</groupId>
+      <artifactId>jersey-guice</artifactId>
+      <version>1.19.3</version>
     </dependency>
   </dependencies>
 </project>
