@@ -26,12 +26,14 @@ public class TodoService implements RestService{
 
   @GET
   @Path("{id}/tasks")
+  @Produces(MediaType.APPLICATION_JSON)
   public Object getTasks(@PathParam("id") String id) {
     return taskService.get();
   }
   
   @GET
   @Path("{id}")
+  @Produces(MediaType.APPLICATION_JSON)
   public Object get(@PathParam("id") String id) {
     return "get by id";
   }
