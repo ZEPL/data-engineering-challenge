@@ -71,6 +71,9 @@ public class TodoService implements RestService{
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
+    if (value.name == null) {
+      return Response.status(400).entity("Malformed json").build();
+    }
     
     // TODO: put DB
     
