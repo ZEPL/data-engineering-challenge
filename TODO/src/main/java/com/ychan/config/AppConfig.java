@@ -1,5 +1,6 @@
 package com.ychan.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.TypeLiteral;
@@ -23,6 +24,7 @@ public class AppConfig extends GuiceServletContextListener {
 
         bind(TodoService.class);
         bind(TaskService.class);
+        bind(ObjectMapper.class);
         bind(new TypeLiteral<Dao<Todo>>() {}).to(TodoDao.class);
 
         serve("/*").with(GuiceContainer.class);
