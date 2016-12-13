@@ -4,13 +4,13 @@ import java.util.List;
 
 public class todos {
 
-    List<todo> todos;
+    List<Todo> todos;
 
-    public List<todo> getTodos() {
+    public List<Todo> getTodos() {
         return todos;
     }
 
-    public void setTodos(List<todo> todos) {
+    public void setTodos(List<Todo> todos) {
         this.todos = todos;
     }
 }

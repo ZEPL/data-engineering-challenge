@@ -3,13 +3,13 @@ package com.jihoon.model;
 /**
  * Created by USER on 2016-12-13.
  */
-public class todo {
+public class Todo {
 
     private String id;
     private String name;
     private String created;
 
-    public todo(String id, String name, String created) {
+    public Todo(String id, String name, String created) {
         this.id = id;
         this.name = name;
         this.created = created;

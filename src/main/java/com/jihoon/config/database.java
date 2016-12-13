@@ -7,14 +7,14 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
-public class database {
+public class Database {
 
     private String username;
     private String password;
     private String databaseName;
 
     @Inject
-    public database(configuration config){
+    public Database(Configuration config){
         this.username = config.getDatabaseUser();
         this.password = config.getDatabasePassword();
         this.databaseName = config.getDatabase();
@@ -31,6 +31,8 @@ public class database {
 
         MongoCollection<Document> collection = database.getCollection("todos");
 
+        System.out.println("mongoDB init completed");
+//        System.out.println(collection.toString());
 //        collection.find().forEach(printBlock);
     }
 

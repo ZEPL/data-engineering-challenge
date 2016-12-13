@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 @Singleton
-public class configuration{
+public class Configuration {
 
     private String serverAddress;
     private String serverPort;
@@ -17,7 +17,7 @@ public class configuration{
     private String databasePassword;
 
 
-    public configuration(){
+    public Configuration(){
         Properties prop = new Properties();
         InputStream config = null;
 
@@ -36,7 +36,7 @@ public class configuration{
             String address = prop.getProperty("address");
             String port = prop.getProperty("port");
 
-            String database = prop.getProperty("database");
+            String database = prop.getProperty("Database");
             String dbuser = prop.getProperty("dbuser");
             String dbpassword = prop.getProperty("dbpassword");
 

@@ -2,25 +2,27 @@ package com.jihoon.controller;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.jihoon.model.todo;
+import com.jihoon.model.Todo;
+import com.jihoon.service.TodoService;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Path("/todos")
 @Singleton
-public class todoController {
+public class TodoController {
 
 	private ObjectMapper objectMapper;
+    private TodoService todoService;
 
 	@Inject
-	public todoController(ObjectMapper objectMapper){
+	public TodoController(ObjectMapper objectMapper, TodoService todoService){
 		this.objectMapper = objectMapper;
+		this.todoService = todoService;
 	}
 
 	@GET
@@ -28,13 +30,8 @@ public class todoController {
 	public Response getTodos() {
 
 		try {
-			String output = "getTodos";
 
-			//test for json mapper ( Dummy data )
-			List<todo> todoList = new ArrayList();
-			todoList.add(new todo("1","name1","todo1"));
-			todoList.add(new todo("2","name2","todo2"));
-
+            List<Todo> todoList = todoService.getTodos();
 			String jsonInString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(todoList);
 			System.out.println(jsonInString);
 
