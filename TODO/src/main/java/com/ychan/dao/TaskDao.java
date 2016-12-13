@@ -2,20 +2,20 @@ package com.ychan.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ychan.DBManager;
+import com.ychan.DBManager.NotExistException;
 import com.ychan.dto.Task;
 
 public class TaskDao implements Dao<Task> {
 
   @Override
   public Object[] getAll() {
-    // TODO Auto-generated method stub
-    return null;
+    final DBManager db = DBManager.getInstance();
+    return db.getPattern(Task.class.getName(), Task.class);
   }
 
   @Override
-  public Task getById(String id) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+  public Task getById(String id) throws NotExistException, Exception {
+    return DBManager.getInstance().get(id, Task.class);
   }
 
   @Override
