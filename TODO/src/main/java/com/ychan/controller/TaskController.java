@@ -3,6 +3,7 @@ package com.ychan.controller;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -131,4 +132,36 @@ public class TaskController implements BaseController {
     }
     return Response.status(200).entity(resJson).build();
   }
+
+  @PUT
+  @Path("{taskId}")
+  public Response put(@PathParam("todoId") final String todoId,
+      @PathParam("taskId") final String taskId, final String body) {
+    String resJson = null;
+    try {
+      final Task oldOne = taskService.getById(taskId);
+      final Task newOne = mapper.readValue(body, Task.class);
+      if (newOne.name == null || newOne.description == null || newOne.status == null) {
+        return BaseController.super.sendError(400, "Malformed json");
+      }
+      newOne.setTodoId(oldOne.getTodoId());
+      newOne.setId(oldOne.getId());
+      newOne.setCreated(oldOne.getCreated());
+
+      taskService.add(newOne);
+
+      resJson = mapper.writeValueAsString(newOne);
+    } catch (NotExistException e) {
+      return BaseController.super.sendError(400, "No Todo");
+    } catch (Exception e) {
+      // JsonParseException
+      // JsonMappingException
+      // JsonProcessingException
+      // IOException
+      e.printStackTrace();
+      return BaseController.super.sendError();
+    }
+    return Response.status(200).entity(resJson).build();
+  }
+
 }
