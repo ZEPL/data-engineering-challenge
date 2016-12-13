@@ -133,4 +133,31 @@ public class TaskServiceTest extends BaseServiceTest{
     Task actual = DBManager.getInstance().get(responsed.id, Task.class);
     assertEquals(mockName, actual.name);
   }
+
+  @Test
+  public void testPut() throws IOException, NotExistException {
+    final Task expected = mockTaskWorking;
+    expected.setStatus(Task.DONE);
+    final ObjectNode mockData = mapper.createObjectNode();
+    mockData.put("name", mockTaskWorking.name);
+    mockData.put("description", mockTaskWorking.description);
+    mockData.put("status", Task.DONE);
+
+    DBManager.getInstance().put(mockTaskWorking.getId(), mockTaskWorking);
+
+    // test response
+    final String addr = MessageFormat.format("{0}/{1}/{2}/{3}",
+        "todos", mockTodo.getId(), "tasks", expected.id);
+    final ClientResponse res = sendRequest(addr, "PUT", mockData.toString());
+    final String json = res.getEntity(String.class);
+    final Task responsed = mapper.readValue(json, Task.class);
+    assertEquals(200, res.getStatus());
+    assertEquals(expected.getName(), responsed.name);
+    assertEquals(expected.getStatus(), responsed.status);
+
+    // test database
+    Task actual = DBManager.getInstance().get(responsed.id, Task.class);
+    assertEquals(expected.getName(), actual.name);
+    assertEquals(expected.getStatus(), actual.status);
+  }
 }
