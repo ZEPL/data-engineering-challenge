@@ -62,17 +62,17 @@ public class TaskController implements BaseController {
 
   @GET
   @Path("/done")
-  public Response getDoneTasks(@PathParam("todoId") final String todoId, @PathParam("taskId") final String taskid) {
-    return getTasksWithStatus(todoId, taskid, Task.DONE);
+  public Response getDoneTasks(@PathParam("todoId") final String todoId) {
+    return getTasksWithStatus(todoId, Task.DONE);
   }
 
   @GET
   @Path("/not-done")
-  public Response getNotDoneTasks(@PathParam("todoId") final String todoId, @PathParam("taskId") final String taskid) {
-    return getTasksWithStatus(todoId, taskid, Task.NOT_DONE);
+  public Response getNotDoneTasks(@PathParam("todoId") final String todoId) {
+    return getTasksWithStatus(todoId, Task.NOT_DONE);
   }
 
-  public Response getTasksWithStatus(final String todoId, final String taskid, final String status) {
+  public Response getTasksWithStatus(final String todoId, final String status) {
     String resJson = null;
     try {
       if (!existTodo(todoId))
