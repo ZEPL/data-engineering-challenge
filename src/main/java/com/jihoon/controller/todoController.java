@@ -1,5 +1,6 @@
 package com.jihoon.controller;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.jihoon.model.todo;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -13,10 +14,14 @@ import java.util.List;
 
 @Path("/todos")
 @Singleton
-public class todoService {
+public class todoController {
 
-	//TODO : temporary use to init and test => DI
-	ObjectMapper mapper = new ObjectMapper();
+	private ObjectMapper objectMapper;
+
+	@Inject
+	public todoController(ObjectMapper objectMapper){
+		this.objectMapper = objectMapper;
+	}
 
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -30,13 +35,7 @@ public class todoService {
 			todoList.add(new todo("1","name1","todo1"));
 			todoList.add(new todo("2","name2","todo2"));
 
-//			todos resultTodos = new todos();
-//			resultTodos.setTodos(todoList);
-
-//			String jsonInString = mapper.writeValueAsString(todoList);
-//			System.out.println(jsonInString);
-
-			String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(todoList);
+			String jsonInString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(todoList);
 			System.out.println(jsonInString);
 
 			return Response.status(200).entity(jsonInString).build();
