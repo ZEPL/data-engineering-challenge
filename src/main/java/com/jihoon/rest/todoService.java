@@ -1,16 +1,44 @@
 package com.jihoon.rest;
  
+import com.jihoon.rest.model.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
- 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Path("/todos")
-public class HelloWorldService {
- 
+public class todoService {
+
+	//TODO : temporary use to init and test => DI
+	ObjectMapper mapper = new ObjectMapper();
+
 	@GET
 	public Response getTodos() {
- 
-		String output = "getTodos";
-		return Response.status(200).entity(output).build();
+
+		try {
+			String output = "getTodos";
+
+			//test for json mapper ( Dummy data )
+			List<todo> todoList = new ArrayList();
+			todoList.add(new todo("1","name1","todo1"));
+			todoList.add(new todo("2","name2","todo2"));
+
+//			todos resultTodos = new todos();
+//			resultTodos.setTodos(todoList);
+
+//			String jsonInString = mapper.writeValueAsString(todoList);
+//			System.out.println(jsonInString);
+
+			String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(todoList);
+			System.out.println(jsonInString);
+
+			return Response.status(200).entity(jsonInString).build();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(500).build();
+		}
 	}
 
 	@GET
