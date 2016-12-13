@@ -23,10 +23,13 @@ public class AppConfig extends GuiceServletContextListener {
         super.configureServlets();
 
         bind(TodoController.class);
-        bind(TaskController.class);
         bind(TodoService.class);
-        bind(TaskService.class);
         bind(TodoDao.class);
+
+        bind(TaskController.class);
+        bind(TaskService.class);
+        bind(TaskDao.class);
+
         bind(ObjectMapper.class);
 
         serve("/*").with(GuiceContainer.class);
