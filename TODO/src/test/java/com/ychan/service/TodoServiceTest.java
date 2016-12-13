@@ -1,9 +1,10 @@
 package com.ychan.service;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Arrays;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
@@ -13,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -30,6 +32,10 @@ public class TodoServiceTest {
   static final int PORT_NUM = 5000;
   private App app;
   private ObjectMapper mapper;
+
+  // mock data
+  final Todo mockTodoToday = new Todo("today");
+  final Todo mockTodoTomorrow = new Todo("tomorrow");
 
   private static URI getBaseURI() {
     return UriBuilder.fromUri("http://localhost/").port(PORT_NUM).build();
@@ -61,10 +67,39 @@ public class TodoServiceTest {
   }
 
   @Test
-  public void testGet() {
+  public void testGetAll() {
+    Todo[] expected = { mockTodoToday, mockTodoTomorrow };
+    Arrays.sort(expected, (Object a, Object b) -> {
+      return ((Todo) a).name.compareTo(((Todo) b).name);
+    });
+    DBManager db = DBManager.getInstance();
+    db.flushAll();
+    Arrays.stream(expected).forEach(todo -> {
+      try {
+        db.put(todo.getId(), todo);
+      } catch (JsonProcessingException e) {
+        e.printStackTrace();
+        fail();
+      }
+    });
+
     final ClientResponse res = sendRequest("todos", "GET");
-    final String text = res.getEntity(String.class);
+    final String json = res.getEntity(String.class);
+    Todo[] responsed = null;
+    try {
+      responsed = mapper.readValue(json, Todo[].class);
+    } catch (IOException e) {
+      e.printStackTrace();
+      fail();
+    }
+    Arrays.sort(responsed, (Object a, Object b) -> {
+      return ((Todo) a).name.compareTo(((Todo) b).name);
+    });
+
     assertEquals(200, res.getStatus());
+    for (int i = 0; i < responsed.length; i++) {
+      assertEquals(expected[i].getName(), responsed[i].getName());
+    }
   }
 
   @Test

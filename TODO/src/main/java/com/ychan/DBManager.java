@@ -11,6 +11,7 @@ import redis.clients.jedis.JedisPoolConfig;
 
 import java.io.*;
 import java.util.Arrays;
+import java.util.Set;
 
 public class DBManager {
   private static final String DB_PATH = "todo.db";
@@ -41,20 +42,44 @@ public class DBManager {
     final Jedis jedis = pool.getResource();
     final String json = mapper.writeValueAsString(value);
     jedis.set(key, json);
-    jedis.bgsave();
+    jedis.save();
     return json;
   }
 
   public <T> T get(final String key, final Class<T> type) throws JsonParseException, JsonMappingException, IOException {
-    Jedis jedis = pool.getResource();
+    final Jedis jedis = pool.getResource();
     final String raw = jedis.get(key);
+    jedis.close();
     return mapper.readValue(raw, type);
   }
 
-  public void del(final String... keys) {
+  public <T> Object[] getPattern(final String pattern, final Class<T> type) {
     Jedis jedis = pool.getResource();
+    final Set<String> keys = jedis.keys(pattern.concat("*"));
+    final Object[] values = keys.stream().map(jedis::get).map((json) -> {
+      Object value = null;
+      try {
+        value = mapper.readValue(json, type);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      return value;
+    }).toArray();
+    jedis.close();
+    return values;
+  }
+
+  public void del(final String... keys) {
+    final Jedis jedis = pool.getResource();
     Arrays.stream(keys).map(jedis::del);
-    jedis.bgsave();
+    jedis.save();
+    jedis.close();
+  }
+
+  public void flushAll() {
+    final Jedis jedis = pool.getResource();
+    jedis.flushAll();
+    jedis.close();
   }
 
   @Override

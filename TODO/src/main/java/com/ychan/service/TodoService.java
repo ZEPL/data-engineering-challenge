@@ -52,7 +52,15 @@ public class TodoService implements RestService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response get() {
-    return Response.status(200).entity("todo-get").build();
+    Object[] todos = (Object[]) DBManager.getInstance().getPattern(Todo.class.getName(), Todo.class);
+    String resJson = null;
+    try {
+      resJson = mapper.writeValueAsString(todos);
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+      return RestService.super.sendError("Database Error");
+    }
+    return Response.status(200).entity(resJson).build();
   }
 
   @POST
