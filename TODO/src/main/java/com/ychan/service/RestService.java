@@ -28,4 +28,16 @@ public interface RestService {
   @DELETE
   @Produces(MediaType.APPLICATION_JSON)
   public Response delete();
+
+  default public Response sendError() {
+    return sendError(500, "Internal Server Error");
+  }
+
+  default public Response sendError(String message) {
+    return sendError(500, message);
+  }
+
+  default public Response sendError(int statusCode, String message) {
+    return Response.status(500).entity(message).build();
+  }
 }

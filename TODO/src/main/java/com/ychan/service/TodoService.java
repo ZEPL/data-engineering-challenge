@@ -23,11 +23,11 @@ import com.ychan.dao.Dao;
 import com.ychan.dto.Todo;
 
 @Path("/todos")
-public class TodoService implements RestService{
+public class TodoService implements RestService {
   private Dao<Todo> dao;
   private TaskService taskService;
   private ObjectMapper mapper;
-  
+
   @Inject
   public TodoService(Dao<Todo> dao, TaskService taskService, ObjectMapper mapper) {
     this.dao = dao;
@@ -41,7 +41,7 @@ public class TodoService implements RestService{
   public Object getTasks(@PathParam("id") String id) {
     return taskService.get();
   }
-  
+
   @GET
   @Path("{id}")
   @Produces(MediaType.APPLICATION_JSON)
@@ -63,18 +63,19 @@ public class TodoService implements RestService{
     try {
       value = mapper.readValue(body, Todo.class);
     } catch (Exception e) {
-      return Response.status(500).entity("Database Error").build();
+      e.printStackTrace();
+      return RestService.super.sendError();
     }
     if (value.name == null) {
-      return Response.status(400).entity("Malformed json").build();
+      return RestService.super.sendError(400, "Malformed json");
     }
-    
+
     String jsonString = null;
     try {
       jsonString = DBManager.getInstance().put(value.getId(), value);
     } catch (JsonProcessingException e) {
       e.printStackTrace();
-      return Response.status(500).entity("Database Error").build();
+      return RestService.super.sendError("Database Error");
     }
     return Response.status(200).entity(jsonString).build();
   }

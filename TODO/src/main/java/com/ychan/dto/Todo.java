@@ -1,5 +1,6 @@
 package com.ychan.dto;
 
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -16,7 +17,10 @@ public class Todo {
   public Date created;
   
   public Todo(@JsonProperty("name") String name) {
-    this.id = UUID.randomUUID().toString();
+    Object[] params = new Object[]{
+        this.getClass().getName(),
+        UUID.randomUUID().toString()};
+    this.id = MessageFormat.format("{0}-{1}", params);
     this.created = new Date();
     this.name = name;
   }
