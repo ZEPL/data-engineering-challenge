@@ -21,7 +21,12 @@ public class DBManager {
 
   private DBManager() throws IOException {
     // TODO: life cycle, port
-    pool = new JedisPool(new JedisPoolConfig(), "localhost");
+    JedisPoolConfig config = new JedisPoolConfig();
+    config.setMaxWaitMillis(3000);
+    config.setMaxTotal(5);
+    config.setMaxIdle(5);
+    config.setMinIdle(1);
+    pool = new JedisPool(config, "localhost");
     mapper = new ObjectMapper();
   }
 
@@ -43,6 +48,7 @@ public class DBManager {
     final String json = mapper.writeValueAsString(value);
     jedis.set(key, json);
     jedis.save();
+    jedis.close();
     return json;
   }
 
