@@ -14,7 +14,7 @@ public class Task implements Dto{
   public String status;
   @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss.SSS")
   public Date created;
-  
+
   public Task(@JsonProperty("name") String name, 
       @JsonProperty("description") String description,
       @JsonProperty("status") String status) {
