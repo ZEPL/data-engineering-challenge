@@ -46,23 +46,32 @@ public class DBManager {
     return json;
   }
 
-  public <T> T get(final String key, final Class<T> type) throws JsonParseException, JsonMappingException, IOException {
+  public <T> T get(final String key, final Class<T> type)
+      throws JsonParseException, JsonMappingException, IOException, NotExistException {
     final Jedis jedis = pool.getResource();
     final String raw = jedis.get(key);
     jedis.close();
+    if (raw == null)
+      throw new NotExistException();
     return mapper.readValue(raw, type);
   }
 
   public <T> Object[] getPattern(final String pattern, final Class<T> type) {
     Jedis jedis = pool.getResource();
     final Set<String> keys = jedis.keys(pattern.concat("*"));
-    final Object[] values = keys.stream().map(jedis::get).map((json) -> {
+    final Object[] values = keys.stream().map(jedis::get).map(json -> {
+      // TODO: Not Exist
+      // if (json == null) {
+      //
+      // }
       Object value = null;
       try {
         value = mapper.readValue(json, type);
       } catch (IOException e) {
+        // TODO Auto-generated catch block
         e.printStackTrace();
       }
+
       return value;
     }).toArray();
     jedis.close();
@@ -86,5 +95,9 @@ public class DBManager {
   protected void finalize() throws Throwable {
     super.finalize();
     pool.destroy();
+  }
+
+  public class NotExistException extends Exception {
+    private static final long serialVersionUID = 1L;
   }
 }

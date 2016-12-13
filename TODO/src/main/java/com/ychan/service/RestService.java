@@ -38,6 +38,6 @@ public interface RestService {
   }
 
   default public Response sendError(int statusCode, String message) {
-    return Response.status(500).entity(message).build();
+    return Response.status(statusCode).entity(message).build();
   }
 }

@@ -25,6 +25,7 @@ import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.ychan.App;
 import com.ychan.DBManager;
+import com.ychan.DBManager.NotExistException;
 import com.ychan.dto.Todo;
 
 public class TodoServiceTest {
@@ -76,7 +77,7 @@ public class TodoServiceTest {
     db.flushAll();
     Arrays.stream(expected).forEach(todo -> {
       try {
-        db.put(todo.getId(), todo);
+        db.put(todo.id, todo);
       } catch (JsonProcessingException e) {
         e.printStackTrace();
         fail();
@@ -98,8 +99,33 @@ public class TodoServiceTest {
 
     assertEquals(200, res.getStatus());
     for (int i = 0; i < responsed.length; i++) {
-      assertEquals(expected[i].getName(), responsed[i].getName());
+      assertEquals(expected[i].name, responsed[i].name);
     }
+  }
+
+  @Test
+  public void testGetById() {
+    Todo expected = mockTodoToday;
+    try {
+      DBManager.getInstance().put(expected.id, expected);
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+      fail();
+    }
+
+    final ClientResponse res = sendRequest("todos/".concat(expected.id), "GET");
+    final String json = res.getEntity(String.class);
+    Todo responsed = null;
+    try {
+      responsed = mapper.readValue(json, Todo.class);
+    } catch (IOException e) {
+      e.printStackTrace();
+      fail();
+    }
+    assertEquals(200, res.getStatus());
+    assertEquals(expected.id, responsed.id);
+    assertEquals(expected.name, responsed.name);
+    assertEquals(expected.created, responsed.created);
   }
 
   @Test
@@ -116,7 +142,13 @@ public class TodoServiceTest {
     assertEquals(mockName, responsed.name);
 
     // test database
-    final Todo dataInDB = DBManager.getInstance().get(responsed.id, Todo.class);
-    assertEquals(mockName, dataInDB.name);
+    Todo actual = null;
+    try {
+      actual = DBManager.getInstance().get(responsed.id, Todo.class);
+    } catch (NotExistException e) {
+      e.printStackTrace();
+      fail();
+    }
+    assertEquals(mockName, actual.name);
   }
 }
