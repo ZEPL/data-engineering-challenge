@@ -1,9 +1,12 @@
 package com.ychan.controller;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +17,8 @@ import com.ychan.service.TaskService;
 import com.ychan.service.TodoService;
 
 @Path("/todos/{todoId}/tasks")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class TaskController implements BaseController {
   private TodoService todoService;
   private TaskService taskService;
@@ -37,7 +42,7 @@ public class TaskController implements BaseController {
 
   @GET
   @Path("{taskId}")
-  public Response getTasks(@PathParam("todoId") final String todoId, @PathParam("taskId") final String taskid) {
+  public Response get(@PathParam("todoId") final String todoId, @PathParam("taskId") final String taskid) {
     String resJson = null;
     try {
       if (!existTodo(todoId))
@@ -46,6 +51,34 @@ public class TaskController implements BaseController {
       resJson = mapper.writeValueAsString(todo);
     } catch (NotExistException e) {
       return BaseController.super.sendError(400, "No task");
+    } catch (Exception e) {
+      // JsonProcessingException
+      e.printStackTrace();
+      return BaseController.super.sendError();
+    }
+    return Response.status(200).entity(resJson).build();
+  }
+
+  @GET
+  @Path("/done")
+  public Response getDoneTasks(@PathParam("todoId") final String todoId, @PathParam("taskId") final String taskid) {
+    return getTasksWithStatus(todoId, taskid, Task.DONE);
+  }
+
+  @GET
+  @Path("/not-done")
+  public Response getNotDoneTasks(@PathParam("todoId") final String todoId, @PathParam("taskId") final String taskid) {
+    return getTasksWithStatus(todoId, taskid, Task.NOT_DONE);
+  }
+
+  public Response getTasksWithStatus(final String todoId, final String taskid, final String status) {
+    String resJson = null;
+    try {
+      if (!existTodo(todoId))
+        return BaseController.super.sendError(400, "No Todo");
+      final Task[] tasks = taskService.getAllWithStatus(todoId, status);
+
+      resJson = mapper.writeValueAsString(tasks);
     } catch (Exception e) {
       // JsonProcessingException
       e.printStackTrace();

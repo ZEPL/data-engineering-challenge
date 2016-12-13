@@ -82,11 +82,11 @@ public class TodoServiceTest extends BaseServiceTest{
     final Todo mockTodo = new Todo("todo");
     final Task mockTaskWorking =
         new Task("working", "work hard", Task.NOT_DONE, mockTodo.getId());
-    final Task mockTodoMeeting =
+    final Task mockTaskMeeting =
         new Task("meeting", "at 12pm", Task.DONE, mockTodo.getId());
 
     final String addr = MessageFormat.format("{0}/{1}", "todos", mockTodo.getId());
-    Task[] expected = { mockTaskWorking, mockTodoMeeting };
+    Task[] expected = { mockTaskWorking, mockTaskMeeting };
     Arrays.sort(expected, (Object a, Object b) -> {
       return ((Task) a).name.compareTo(((Task) b).name);
     });

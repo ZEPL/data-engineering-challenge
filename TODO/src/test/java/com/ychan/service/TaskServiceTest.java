@@ -4,9 +4,12 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Arrays;
+
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sun.jersey.api.client.ClientResponse;
@@ -20,7 +23,7 @@ public class TaskServiceTest extends BaseServiceTest{
   final Todo mockTodo = new Todo("todo");
   final Task mockTaskWorking = 
       new Task("working", "work hard", Task.NOT_DONE, mockTodo.getId());
-  final Task mockTodoMeeting = 
+  final Task mockTaskMeeting =
       new Task("meeting", "at 12pm", Task.DONE, mockTodo.getId());
 
 //  @Test
@@ -34,9 +37,9 @@ public class TaskServiceTest extends BaseServiceTest{
 //    DBManager db = DBManager.getInstance();
 //    db.flushAll();
 //    db.put(mockTodo.getId(), mockTodo);
-//    Arrays.stream(expected).forEach(todo -> {
+//    Arrays.stream(expected).forEach(task -> {
 //      try {
-//        db.put(todo.id, todo);
+//        db.put(task.id, task);
 //      } catch (JsonProcessingException e) {
 //        e.printStackTrace();
 //        fail();
@@ -78,6 +81,37 @@ public class TaskServiceTest extends BaseServiceTest{
   }
 
   @Test
+  public void testGetDone() throws IOException {
+    testGetWithStatus("done", "not-done");
+  }
+
+  public void testGetWithStatus(final String ...endpoints) throws IOException {
+    for (String ep : endpoints) {
+      final String addr = MessageFormat.format("{0}/{1}/{2}/{3}", "todos", mockTodo.getId(), "tasks", ep);
+      Task[] tasks = { mockTaskWorking, mockTaskMeeting };
+      Task expected = ep.equals("done") ? mockTaskMeeting : mockTaskWorking;  // TODO: refactoring
+
+      DBManager db = DBManager.getInstance();
+      db.flushAll();
+      db.put(mockTodo.getId(), mockTodo);
+      Arrays.stream(tasks).forEach(task -> {
+        try {
+          db.put(task.id, task);
+        } catch (JsonProcessingException e) {
+          e.printStackTrace();
+          fail();
+        }
+      });
+
+      final ClientResponse res = sendRequest(addr, "GET");
+      final String json = res.getEntity(String.class);
+      Task[] responsed = mapper.readValue(json, Task[].class);
+      assertEquals(200, res.getStatus());
+      assertEquals(expected.name, responsed[0].name);
+    }
+  }
+
+  @Test
   public void testPost() throws JsonParseException, JsonMappingException, IOException, NotExistException {
     final String mockName = "test";
     final String mockDesc = "test description";
@@ -88,8 +122,7 @@ public class TaskServiceTest extends BaseServiceTest{
     DBManager.getInstance().put(mockTodo.getId(), mockTodo);
 
     // test response
-    final String addr = MessageFormat.format("{0}/{1}/{2}", 
-        "todos", mockTodo.getId(), "tasks");
+    final String addr = MessageFormat.format("{0}/{1}/{2}", "todos", mockTodo.getId(), "tasks");
     final ClientResponse res = sendRequest(addr, "POST", mockData.toString());
     final String json = res.getEntity(String.class);
     final Task responsed = mapper.readValue(json, Task.class);

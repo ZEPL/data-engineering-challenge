@@ -31,4 +31,11 @@ public class TaskService implements BaseService {
         .filter(task -> task.todoId.equals(todoId))
         .toArray(Task[]::new);
   }
+
+  public Task[] getAllWithStatus(final String todoId, final String status) {
+    final Task[] tasks = getAll(todoId);
+    return Arrays.stream(tasks)
+        .filter(task -> task.status.equals(status))
+        .toArray(Task[]::new);
+  }
 }
