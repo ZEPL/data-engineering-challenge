@@ -1,10 +1,8 @@
 package com.ychan.dao;
 
-import java.util.List;
-
 public interface Dao<T> {
-  List<T> getAll();
-  T getById(String id);
-  void put(String key, T value);
+  Object[] getAll();
+  T getById(String id) throws Exception;
+  void put(String key, T value) throws Exception;
   void del(String key);
 }

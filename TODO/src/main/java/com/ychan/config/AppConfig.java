@@ -3,12 +3,12 @@ package com.ychan.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.TypeLiteral;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
+import com.ychan.controller.TaskController;
+import com.ychan.controller.TodoController;
 import com.ychan.dao.*;
-import com.ychan.dto.Todo;
 import com.ychan.service.TaskService;
 import com.ychan.service.TodoService;
 
@@ -22,10 +22,12 @@ public class AppConfig extends GuiceServletContextListener {
       protected void configureServlets() {
         super.configureServlets();
 
+        bind(TodoController.class);
+        bind(TaskController.class);
         bind(TodoService.class);
         bind(TaskService.class);
+        bind(TodoDao.class);
         bind(ObjectMapper.class);
-        bind(new TypeLiteral<Dao<Todo>>() {}).to(TodoDao.class);
 
         serve("/*").with(GuiceContainer.class);
       }

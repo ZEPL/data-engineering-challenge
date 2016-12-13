@@ -56,10 +56,10 @@ public class DBManager {
     return mapper.readValue(jsonString, type);
   }
 
-  public <T> T[] getPattern(final String pattern, final Class<T> type) {
+  public <T> Object[] getPattern(final String pattern, final Class<T> type) {
     Jedis jedis = pool.getResource();
     final Set<String> keys = jedis.keys(pattern.concat("*"));
-    final T[] values = keys.stream()
+    final Object[] values = keys.stream()
         .map(jedis::get)
         .map(json -> {
           // TODO: Not Exist
@@ -71,7 +71,7 @@ public class DBManager {
             e.printStackTrace();
           }
           return value;
-        }).toArray(size -> (T[]) new Object[size]);
+        }).toArray();
     jedis.close();
     return values;
   }

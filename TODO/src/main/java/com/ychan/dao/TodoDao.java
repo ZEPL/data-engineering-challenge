@@ -1,31 +1,28 @@
 package com.ychan.dao;
 
-import java.util.List;
-
-import com.google.inject.Inject;
-import com.google.inject.TypeLiteral;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ychan.DBManager;
+import com.ychan.DBManager.NotExistException;
 import com.ychan.dto.Todo;
 
 public class TodoDao implements Dao<Todo> {
-  
-  public List<Todo> getAll() {
-    // TODO Auto-generated method stub
-    return null;
+
+  public Object[] getAll() {
+    final DBManager db = DBManager.getInstance();
+    return db.getPattern(Todo.class.getName(), Todo.class);
   }
 
-  public Todo getById(String id) {
-    // TODO Auto-generated method stub
-    return null;
+  public Todo getById(String id) throws NotExistException, Exception {
+    return DBManager.getInstance().get(id, Todo.class);
   }
 
-  public void put(String key, Todo value) {
-    // TODO Auto-generated method stub
-    
+  public void put(String key, Todo value) throws JsonProcessingException {
+    DBManager.getInstance().put(key, value);
   }
 
   public void del(String key) {
     // TODO Auto-generated method stub
-    
+
   }
 
 }
