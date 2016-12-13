@@ -79,3 +79,8 @@ local.properties
 
 # Code Recommenders
 .recommenders/
+
+
+# Redis
+*.db
+*.rdb
