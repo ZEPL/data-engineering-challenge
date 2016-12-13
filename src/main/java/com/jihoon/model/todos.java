@@ -1,4 +1,4 @@
-package com.jihoon.rest.model;
+package com.jihoon.model;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.jihoon.rest.model;
+package com.jihoon.model;
 
 /**
  * Created by USER on 2016-12-13.
