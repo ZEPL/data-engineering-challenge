@@ -160,4 +160,23 @@ public class TaskServiceTest extends BaseServiceTest{
     assertEquals(expected.getName(), actual.name);
     assertEquals(expected.getStatus(), actual.status);
   }
+
+  @Test
+  public void testDelete() throws JsonProcessingException {
+    DBManager.getInstance().put(mockTaskWorking.getId(), mockTodo);
+    DBManager.getInstance().put(mockTaskWorking.getId(), mockTaskWorking);
+    final String addr = MessageFormat.format("{0}/{1}/{2}/{3}",
+        "todos", mockTodo.getId(), "tasks", mockTaskWorking.getId());
+    final ClientResponse res = sendRequest(addr, "DELETE");
+    assertEquals(200, res.getStatus());
+    try {
+      DBManager.getInstance().get(mockTaskWorking.id, Task.class);
+    } catch (NotExistException e) {
+      // PASS!
+      return;
+    } catch (Exception e) {
+      fail();
+    }
+    fail();
+  }
 }
