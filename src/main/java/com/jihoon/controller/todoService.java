@@ -1,20 +1,25 @@
-package com.jihoon.rest;
- 
-import com.jihoon.rest.model.*;
+package com.jihoon.controller;
+
+import com.google.inject.Singleton;
+import com.jihoon.model.todo;
+import org.codehaus.jackson.map.ObjectMapper;
+
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Path("/todos")
+@Singleton
 public class todoService {
 
 	//TODO : temporary use to init and test => DI
 	ObjectMapper mapper = new ObjectMapper();
 
 	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getTodos() {
 
 		try {
