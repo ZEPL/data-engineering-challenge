@@ -20,11 +20,6 @@ public class app {
 
     public static void main(String[] args) throws Exception {
 
-        logger.info("Msg #1");
-        logger.warn("Msg #2");
-        logger.error("Msg #3");
-        logger.debug("Msg #4");
-
         Injector injector = Guice.createInjector( Stage.PRODUCTION, new configModule());
 
         configuration config = injector.getInstance(configuration.class);

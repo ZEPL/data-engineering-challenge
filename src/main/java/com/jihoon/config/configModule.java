@@ -20,6 +20,7 @@ public class configModule extends ServletModule {
         bind(todoController.class).in(Singleton.class);
         bind(configuration.class).in(Singleton.class);
         bind(ObjectMapper.class).in(Singleton.class);
+        bind(database.class).in(Singleton.class);
 
         bind(MessageBodyReader.class).to(JacksonJsonProvider.class);
         bind(MessageBodyWriter.class).to(JacksonJsonProvider.class);
