@@ -37,11 +37,11 @@ public class TodoController implements BaseController {
     try {
       final Todo todo = todoService.getById(id);
       resJson = mapper.writeValueAsString(todo);
-    } catch (NotExistException e1) {
+    } catch (NotExistException e) {
       return BaseController.super.sendError(400, "No data");
-    } catch (Exception e1) {
+    } catch (Exception e) {
       // JsonProcessingException
-      e1.printStackTrace();
+      e.printStackTrace();
       return BaseController.super.sendError();
     }
     return Response.status(200).entity(resJson).build();
@@ -73,7 +73,10 @@ public class TodoController implements BaseController {
       todoService.add(value);
       resJson = mapper.writeValueAsString(value);
     } catch (Exception e) {
+      // JsonParseException
+      // JsonMappingException
       // JsonProcessingException
+      // IOException
       e.printStackTrace();
       return BaseController.super.sendError();
     }
