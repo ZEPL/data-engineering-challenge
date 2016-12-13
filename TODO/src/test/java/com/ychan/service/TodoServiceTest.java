@@ -24,7 +24,7 @@ public class TodoServiceTest extends BaseServiceTest{
   final Todo mockTodoTomorrow = new Todo("tomorrow");
 
   @Test
-  public void testGetAll() {
+  public void testGetAll() throws JsonParseException, JsonMappingException, IOException {
     Todo[] expected = { mockTodoToday, mockTodoTomorrow };
     Arrays.sort(expected, (Object a, Object b) -> {
       return ((Todo) a).name.compareTo(((Todo) b).name);
@@ -42,13 +42,7 @@ public class TodoServiceTest extends BaseServiceTest{
 
     final ClientResponse res = sendRequest("todos", "GET");
     final String json = res.getEntity(String.class);
-    Todo[] responsed = null;
-    try {
-      responsed = mapper.readValue(json, Todo[].class);
-    } catch (IOException e) {
-      e.printStackTrace();
-      fail();
-    }
+    Todo[] responsed = mapper.readValue(json, Todo[].class);
     Arrays.sort(responsed, (Object a, Object b) -> {
       return ((Todo) a).name.compareTo(((Todo) b).name);
     });
@@ -111,8 +105,7 @@ public class TodoServiceTest extends BaseServiceTest{
 
     final ClientResponse res = sendRequest(addr, "GET");
     final String json = res.getEntity(String.class);
-    Task[] responsed = null;
-    responsed = mapper.readValue(json, Task[].class);
+    Task[] responsed = mapper.readValue(json, Task[].class);
     Arrays.sort(responsed, (Object a, Object b) -> {
       return ((Task) a).name.compareTo(((Task) b).name);
     });
@@ -124,7 +117,7 @@ public class TodoServiceTest extends BaseServiceTest{
   }
 
   @Test
-  public void testPost() throws JsonParseException, JsonMappingException, IOException {
+  public void testPost() throws JsonParseException, JsonMappingException, IOException, NotExistException {
     final String mockName = "test";
     final ObjectNode mockData = mapper.createObjectNode();
     mockData.put("name", mockName);
@@ -137,13 +130,7 @@ public class TodoServiceTest extends BaseServiceTest{
     assertEquals(mockName, responsed.name);
 
     // test database
-    Todo actual = null;
-    try {
-      actual = DBManager.getInstance().get(responsed.id, Todo.class);
-    } catch (NotExistException e) {
-      e.printStackTrace();
-      fail();
-    }
+    Todo actual = DBManager.getInstance().get(responsed.id, Todo.class);
     assertEquals(mockName, actual.name);
   }
 }
