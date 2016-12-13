@@ -18,6 +18,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
+import com.ychan.DBManager;
 import com.ychan.dao.Dao;
 import com.ychan.dto.Todo;
 
@@ -61,30 +62,20 @@ public class TodoService implements RestService{
     Todo value = null;
     try {
       value = mapper.readValue(body, Todo.class);
-    } catch (JsonParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (JsonMappingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+    } catch (Exception e) {
+      return Response.status(500).entity("Database Error").build();
     }
     if (value.name == null) {
       return Response.status(400).entity("Malformed json").build();
     }
     
-    // TODO: put DB
-    
     String jsonString = null;
     try {
-      jsonString = mapper.writeValueAsString(value);
+      jsonString = DBManager.getInstance().put(value.getId(), value);
     } catch (JsonProcessingException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
+      return Response.status(500).entity("Database Error").build();
     }
-    
     return Response.status(200).entity(jsonString).build();
   }
 

@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -23,6 +22,7 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.ychan.App;
+import com.ychan.DBManager;
 import com.ychan.dto.Todo;
 
 public class TodoServiceTest {
@@ -54,52 +54,34 @@ public class TodoServiceTest {
   }
 
   public ClientResponse sendRequest(final String path, final String method, final String body) {
-    Client client = Client.create(new DefaultClientConfig());
-    WebResource service = client.resource(getBaseURI());
+    final Client client = Client.create(new DefaultClientConfig());
+    final WebResource service = client.resource(getBaseURI());
     return service.path(path).accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).method(method,
         ClientResponse.class, body);
   }
 
-  <T> T fromJson(String json, Class<T> targetClass) {
-    Object value = null;
-    try {
-      value = mapper.readValue(json, targetClass);
-    } catch (JsonParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (JsonMappingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    return targetClass.cast(value);
-  }
-
-  <T> String toJson(Class<T> targetClass, Object contents) throws JsonProcessingException {
-    String json = null;
-    json = mapper.writeValueAsString(targetClass.cast(contents));
-    return json;
-  }
-
   @Test
   public void testGet() {
-    ClientResponse res = sendRequest("todos", "GET");
-    String text = res.getEntity(String.class);
+    final ClientResponse res = sendRequest("todos", "GET");
+    final String text = res.getEntity(String.class);
     assertEquals(200, res.getStatus());
   }
 
   @Test
-  public void testPost() {
+  public void testPost() throws JsonParseException, JsonMappingException, IOException {
     final String mockName = "test";
-    ObjectNode mockData = mapper.createObjectNode();
+    final ObjectNode mockData = mapper.createObjectNode();
     mockData.put("name", mockName);
 
-    ClientResponse res = sendRequest("todos", "POST", mockData.toString());
-    String json = res.getEntity(String.class);
-    Todo result = fromJson(json, Todo.class);
+    // test response
+    final ClientResponse res = sendRequest("todos", "POST", mockData.toString());
+    final String json = res.getEntity(String.class);
+    final Todo responsed = mapper.readValue(json, Todo.class);
     assertEquals(200, res.getStatus());
-    assertEquals(mockName, result.name);
+    assertEquals(mockName, responsed.name);
+
+    // test database
+    final Todo dataInDB = DBManager.getInstance().get(responsed.id, Todo.class);
+    assertEquals(mockName, dataInDB.name);
   }
 }

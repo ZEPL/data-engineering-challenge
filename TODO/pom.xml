@@ -7,7 +7,7 @@
   <version>1.0-SNAPSHOT</version>
   <name>TODO</name>
   <url>http://maven.apache.org</url>
-  
+
   <build>
     <plugins>
       <plugin>
@@ -20,13 +20,13 @@
       </plugin>
     </plugins>
   </build>
-  
+
   <dependencies>
     <dependency>
-	  <groupId>com.google.inject</groupId>
-	  <artifactId>guice</artifactId>
-	  <version>4.1.0</version>
-	</dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+      <version>4.1.0</version>
+    </dependency>
     <!-- https://mvnrepository.com/artifact/com.google.inject.extensions/guice-servlet -->
     <dependency>
       <groupId>com.google.inject.extensions</groupId>
@@ -57,7 +57,21 @@
       <artifactId>jersey-guice</artifactId>
       <version>1.19.3</version>
     </dependency>
-    
+    <!-- Redis -->
+    <!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
+    <dependency>
+      <groupId>redis.clients</groupId>
+      <artifactId>jedis</artifactId>
+      <version>2.9.0</version>
+    </dependency>
+    <!-- Jackson -->
+    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.8.5</version>
+    </dependency>
+
     <!-- TEST -->
     <!-- https://mvnrepository.com/artifact/junit/junit -->
     <dependency>
