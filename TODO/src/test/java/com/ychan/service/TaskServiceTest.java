@@ -4,12 +4,9 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Arrays;
-
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sun.jersey.api.client.ClientResponse;
@@ -26,39 +23,39 @@ public class TaskServiceTest extends BaseServiceTest{
   final Task mockTodoMeeting = 
       new Task("meeting", "at 12pm", Task.DONE, mockTodo.getId());
 
-  @Test
-  public void testGetAll() throws IOException {
-    final String addr = MessageFormat.format("{0}/{1}/{2}", "todos", mockTodo.getId(), "tasks");
-    Task[] expected = { mockTaskWorking, mockTodoMeeting };
-    Arrays.sort(expected, (Object a, Object b) -> {
-      return ((Task) a).name.compareTo(((Task) b).name);
-    });
-    
-    DBManager db = DBManager.getInstance();
-    db.flushAll();
-    db.put(mockTodo.getId(), mockTodo);
-    Arrays.stream(expected).forEach(todo -> {
-      try {
-        db.put(todo.id, todo);
-      } catch (JsonProcessingException e) {
-        e.printStackTrace();
-        fail();
-      }
-    });
-    
-    final ClientResponse res = sendRequest(addr, "GET");
-    final String json = res.getEntity(String.class);
-    Task[] responsed = null;
-    responsed = mapper.readValue(json, Task[].class);
-    Arrays.sort(responsed, (Object a, Object b) -> {
-      return ((Task) a).name.compareTo(((Task) b).name);
-    });
-
-    assertEquals(200, res.getStatus());
-    for (int i = 0; i < responsed.length; i++) {
-      assertEquals(expected[i].name, responsed[i].name);
-    }
-  }
+//  @Test
+//  public void testGetAll() throws IOException {
+//    final String addr = MessageFormat.format("{0}/{1}/{2}", "todos", mockTodo.getId(), "tasks");
+//    Task[] expected = { mockTaskWorking, mockTodoMeeting };
+//    Arrays.sort(expected, (Object a, Object b) -> {
+//      return ((Task) a).name.compareTo(((Task) b).name);
+//    });
+//    
+//    DBManager db = DBManager.getInstance();
+//    db.flushAll();
+//    db.put(mockTodo.getId(), mockTodo);
+//    Arrays.stream(expected).forEach(todo -> {
+//      try {
+//        db.put(todo.id, todo);
+//      } catch (JsonProcessingException e) {
+//        e.printStackTrace();
+//        fail();
+//      }
+//    });
+//    
+//    final ClientResponse res = sendRequest(addr, "GET");
+//    final String json = res.getEntity(String.class);
+//    Task[] responsed = null;
+//    responsed = mapper.readValue(json, Task[].class);
+//    Arrays.sort(responsed, (Object a, Object b) -> {
+//      return ((Task) a).name.compareTo(((Task) b).name);
+//    });
+//
+//    assertEquals(200, res.getStatus());
+//    for (int i = 0; i < responsed.length; i++) {
+//      assertEquals(expected[i].name, responsed[i].name);
+//    }
+//  }
 
   @Test
   public void testGetById() throws IOException {

@@ -54,22 +54,22 @@ public class TaskController implements BaseController {
     return Response.status(200).entity(resJson).build();
   }
 
-  @GET
-  public Response get(@PathParam("todoId") final String todoId) {
-    String resJson = null;
-    try {
-      if (!existTodo(todoId))
-        return BaseController.super.sendError(400, "No Todo");
-      final Task[] tasks = taskService.getAll();
-
-      resJson = mapper.writeValueAsString(tasks);
-    } catch (Exception e) {
-      // JsonProcessingException
-      e.printStackTrace();
-      return BaseController.super.sendError();
-    }
-    return Response.status(200).entity(resJson).build();
-  }
+//  @GET
+//  public Response get(@PathParam("todoId") final String todoId) {
+//    String resJson = null;
+//    try {
+//      if (!existTodo(todoId))
+//        return BaseController.super.sendError(400, "No Todo");
+//      final Task[] tasks = taskService.getAll(todoId);
+//
+//      resJson = mapper.writeValueAsString(tasks);
+//    } catch (Exception e) {
+//      // JsonProcessingException
+//      e.printStackTrace();
+//      return BaseController.super.sendError();
+//    }
+//    return Response.status(200).entity(resJson).build();
+//  }
 
   @POST
   @Path("/")

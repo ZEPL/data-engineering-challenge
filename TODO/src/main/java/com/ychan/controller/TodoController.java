@@ -14,7 +14,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.ychan.DBManager.NotExistException;
+import com.ychan.dto.Task;
 import com.ychan.dto.Todo;
+import com.ychan.service.TaskService;
 import com.ychan.service.TodoService;
 
 @Path("/todos")
@@ -22,23 +24,42 @@ import com.ychan.service.TodoService;
 @Produces(MediaType.APPLICATION_JSON)
 public class TodoController implements BaseController {
   private TodoService todoService;
+  private TaskService taskService;
   private ObjectMapper mapper;
 
   @Inject
-  public TodoController(TodoService todoService, ObjectMapper mapper) {
+  public TodoController(TodoService todoService, TaskService taskService, ObjectMapper mapper) {
     this.todoService = todoService;
+    this.taskService = taskService;
     this.mapper = mapper;
   }
 
+//  @GET
+//  @Path("/{id}")
+//  public Response get(@PathParam("id") final String id) {
+//    String resJson = null;
+//    try {
+//      final Todo todo = todoService.getById(id);
+//      resJson = mapper.writeValueAsString(todo);
+//    } catch (NotExistException e) {
+//      return BaseController.super.sendError(400, "No data");
+//    } catch (Exception e) {
+//      // JsonProcessingException
+//      e.printStackTrace();
+//      return BaseController.super.sendError();
+//    }
+//    return Response.status(200).entity(resJson).build();
+//  }
   @GET
   @Path("/{id}")
   public Response get(@PathParam("id") final String id) {
     String resJson = null;
     try {
-      final Todo todo = todoService.getById(id);
-      resJson = mapper.writeValueAsString(todo);
+      todoService.getById(id); // check todo
+      final Task[] tasks = taskService.getAll(id);
+      resJson = mapper.writeValueAsString(tasks);
     } catch (NotExistException e) {
-      return BaseController.super.sendError(400, "No data");
+      return BaseController.super.sendError(400, "No Todo");
     } catch (Exception e) {
       // JsonProcessingException
       e.printStackTrace();

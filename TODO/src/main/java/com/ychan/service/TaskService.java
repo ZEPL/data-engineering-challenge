@@ -24,8 +24,11 @@ public class TaskService implements BaseService {
     return dao.getById(id);
   }
 
-  public Task[] getAll() {
+  public Task[] getAll(final String todoId) {
     final Object[] contents = dao.getAll();
-    return Arrays.stream(contents).toArray(Task[]::new);
+    final Task[] tasks = Arrays.stream(contents).toArray(Task[]::new);
+    return Arrays.stream(tasks)
+        .filter(task -> task.todoId.equals(todoId))
+        .toArray(Task[]::new);
   }
 }
