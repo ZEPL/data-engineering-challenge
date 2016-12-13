@@ -1,12 +1,9 @@
 package com.ychan.controller;
 
-import java.io.IOException;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -21,55 +18,39 @@ import com.ychan.dto.Todo;
 import com.ychan.service.TodoService;
 
 @Path("/todos")
-public class TodoController implements BaseController{
-  private TaskController taskController;
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public class TodoController implements BaseController {
   private TodoService todoService;
   private ObjectMapper mapper;
-  
+
   @Inject
-  public TodoController(TaskController taskController, TodoService todoService, ObjectMapper mapper) {
-    this.taskController = taskController;
+  public TodoController(TodoService todoService, ObjectMapper mapper) {
     this.todoService = todoService;
     this.mapper = mapper;
   }
 
   @GET
-  @Path("{id}/tasks")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response getTasks(@PathParam("id") final String id) {
-    return null; // taskService.get();
-  }
-
-  @GET
-  @Path("{id}")
-  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/{id}")
   public Response get(@PathParam("id") final String id) {
-    Todo todo = null;
+    String resJson = null;
     try {
-      todo = todoService.getById(id);
+      final Todo todo = todoService.getById(id);
+      resJson = mapper.writeValueAsString(todo);
     } catch (NotExistException e1) {
       return BaseController.super.sendError(400, "No data");
     } catch (Exception e1) {
+      // JsonProcessingException
       e1.printStackTrace();
-      return BaseController.super.sendError();
-    }
-
-    String resJson = null;
-    try {
-      resJson = mapper.writeValueAsString(todo);
-    } catch (JsonProcessingException e) {
-      e.printStackTrace();
       return BaseController.super.sendError();
     }
     return Response.status(200).entity(resJson).build();
   }
 
   @GET
-  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/")
   public Response get() {
-    Todo[] todos = null;
-    todos = todoService.getAll();
-    
+    final Todo[] todos = todoService.getAll();
     String resJson = null;
     try {
       resJson = mapper.writeValueAsString(todos);
@@ -81,49 +62,28 @@ public class TodoController implements BaseController{
   }
 
   @POST
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response post(String body) {
-    Todo value = null;
+  @Path("/")
+  public Response post(final String body) {
+    String resJson = null;
     try {
-      value = mapper.readValue(body, Todo.class);
-    } catch (Exception e) {
-      e.printStackTrace();
-      return BaseController.super.sendError();
-    }
-    if (value.name == null) {
-      return BaseController.super.sendError(400, "Malformed json");
-    }
-    
-    try {
+      final Todo value = mapper.readValue(body, Todo.class);
+      if (value.name == null) {
+        return BaseController.super.sendError(400, "Malformed json");
+      }
       todoService.add(value);
-    } catch (JsonProcessingException e) {
+      resJson = mapper.writeValueAsString(value);
+    } catch (Exception e) {
+      // JsonProcessingException
       e.printStackTrace();
       return BaseController.super.sendError();
     }
-
-    String jsonString = null;
-    try {
-      jsonString = mapper.writeValueAsString(value);
-    } catch (JsonProcessingException e) {
-      e.printStackTrace();
-      return BaseController.super.sendError();
-    }
-    return Response.status(200).entity(jsonString).build();
+    return Response.status(200).entity(resJson).build();
   }
-//
-//  @PUT
-//  @Consumes(MediaType.APPLICATION_JSON)
-//  @Produces(MediaType.APPLICATION_JSON)
-//  public Response put(String body) {
-//    // TODO Auto-generated method stub
-//    return null;
-//  }
-//
-//  @DELETE
-//  @Produces(MediaType.APPLICATION_JSON)
-//  public Response delete() {
-//    // TODO Auto-generated method stub
-//    return null;
-//  }
+
+  @DELETE
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response delete() {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }

@@ -10,7 +10,7 @@ import com.ychan.DBManager.NotExistException;
 import com.ychan.dao.TodoDao;
 import com.ychan.dto.Todo;
 
-public class TodoService {
+public class TodoService implements BaseService{
   private TodoDao dao;
 
   @Inject
@@ -29,11 +29,6 @@ public class TodoService {
 
   public void add(Todo todo) throws JsonProcessingException {
     dao.put(todo.id, todo);
-  }
-
-  public Response put(String body) {
-    // TODO Auto-generated method stub
-    return null;
   }
 
   public Response delete() {
