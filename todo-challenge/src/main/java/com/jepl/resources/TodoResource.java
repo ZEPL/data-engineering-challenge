@@ -24,7 +24,7 @@ public class TodoResource {
     @Path("/todos")
     @Produces(MediaType.APPLICATION_JSON)
     public void todo(@Suspended final AsyncResponse asyncResponse) {
-        executorService.execute(() -> asyncResponse.resume(todos.values().stream().map(x->x).collect(Collectors.toList())));
+        executorService.execute(() -> asyncResponse.resume(todos.values().stream().map(x -> x).collect(Collectors.toList())));
     }
 
     @GET
@@ -34,14 +34,12 @@ public class TodoResource {
         executorService.execute(() -> asyncResponse.resume(todos.get(todo_id)));
     }
 
-
-    ///todos/:todo_id/tasks/:task_id
     @GET
     @Path("/todos/{todo_id}/tasks/{task_id}")
     @Produces(MediaType.APPLICATION_JSON)
     public void getTodoByTodoIdAndTasksByTaskId(@Suspended final AsyncResponse asyncResponse,
-            @PathParam("todo_id") String todo_id,
-            @PathParam("task_id") String task_id ) {
+                                                @PathParam("todo_id") String todo_id,
+                                                @PathParam("task_id") String task_id) {
         executorService.execute(() -> asyncResponse.resume(Optional.ofNullable(todos.get(todo_id)).orElse(new Todo()).getTasks().get(task_id)));
     }
 
@@ -50,27 +48,31 @@ public class TodoResource {
     @Path("/todos/{todo_id}/tasks/done")
     @Produces(MediaType.APPLICATION_JSON)
     public void setDoneToTask(@Suspended final AsyncResponse asyncResponse,
-            @PathParam("todo_id") String todo_id) {
-        executorService.execute(() -> asyncResponse.resume(Optional.ofNullable(todos.get(todo_id)).orElse(new Todo()).getTasks().values().stream().map(x -> {x.setStatus(TaskStatus.DONE); return x;}).collect(Collectors.toList()) ));
+                              @PathParam("todo_id") String todo_id) {
+        executorService.execute(() -> asyncResponse.resume(Optional.ofNullable(todos.get(todo_id)).orElse(new Todo()).getTasks().values().stream().map(x -> {
+            x.setStatus(TaskStatus.DONE);
+            return x;
+        }).collect(Collectors.toList())));
     }
 
-    // /todos/:todo_id/tasks/not-done
     @GET
     @Path("/todos/{todo_id}/tasks/not-done")
     @Produces(MediaType.APPLICATION_JSON)
     public void setNotDoneToTask(@Suspended final AsyncResponse asyncResponse,
-            @PathParam("todo_id") String todo_id) {
-        executorService.execute(() -> asyncResponse.resume(Optional.ofNullable(todos.get(todo_id)).orElse(new Todo()).getTasks().values().stream().map(x -> {x.setStatus(TaskStatus.NOT_DONE); return x;}).collect(Collectors.toList()) ));
+                                 @PathParam("todo_id") String todo_id) {
+        executorService.execute(() -> asyncResponse.resume(Optional.ofNullable(todos.get(todo_id)).orElse(new Todo()).getTasks().values().stream().map(x -> {
+            x.setStatus(TaskStatus.NOT_DONE);
+            return x;
+        }).collect(Collectors.toList())));
     }
 
-    // POST /todos
     @POST
     @Path("/todos")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public void createTodo(@Suspended final AsyncResponse asyncResponse,
                            Todo todo) {
-        if(Objects.isNull(todo)) {
+        if (Objects.isNull(todo)) {
             executorService.execute(() -> asyncResponse.resume(Lists.newArrayList()));
         }
         Todo aTodo = new Todo(todo.getName());
@@ -88,7 +90,7 @@ public class TodoResource {
     public void createTask(@Suspended final AsyncResponse asyncResponse,
                            @PathParam("todo_id") String todoId,
                            Task task) {
-        if(Objects.isNull(task)) {
+        if (Objects.isNull(task)) {
             executorService.execute(() -> asyncResponse.resume(null));
         }
         Todo todo = Optional.ofNullable(todos.get(todoId)).orElse(new Todo());
@@ -97,20 +99,18 @@ public class TodoResource {
         tasks.put(aTask.getId(), aTask);
         todo.getTasks().put(aTask.getId(), aTask);
         todos.put(aTask.getId(), todo);
-        executorService.execute(() -> asyncResponse.resume( aTask ));
+        executorService.execute(() -> asyncResponse.resume(aTask));
     }
 
-    //PUT /todos/:todo_id/tasks/:task_id
     @PUT
     @Path("/todos/{todo_id}/tasks/{task_id}")
-    //     /todos/4f0e5e79-dce7-473a-b7a6-c8120c29b7c9/tasks/969f73d8-1cd7-44da-8513-0e4961cb1fad
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public void updateTask(@Suspended final AsyncResponse asyncResponse,
                            @PathParam("todo_id") String todoId,
                            @PathParam("task_id") String taskId,
                            Task paramTask) {
-        if(Objects.isNull(paramTask)) {
+        if (Objects.isNull(paramTask)) {
             executorService.execute(() -> asyncResponse.resume(null));
         }
         Todo todo = Optional.ofNullable(todos.get(todoId)).orElse(new Todo());
@@ -119,37 +119,33 @@ public class TodoResource {
         aTask.setName(paramTask.getName());
         aTask.setDescription(paramTask.getDescription());
         aTask.setStatus(paramTask.getStatus());
-        executorService.execute(() -> asyncResponse.resume( aTask ));
+        executorService.execute(() -> asyncResponse.resume(aTask));
     }
 
-//    DELETE /todos/:todo_id
     @DELETE
     @Path("/todos/{todo_id}")
     @Produces(MediaType.APPLICATION_JSON)
     public void deleteTodo(@Suspended final AsyncResponse asyncResponse,
-                           @PathParam("todo_id") String todoId ) {
-        if(!todos.containsKey(todoId)) {
-           throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+                           @PathParam("todo_id") String todoId) {
+        if (!todos.containsKey(todoId)) {
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
 
         }
         todos.remove(todoId);
-        executorService.execute(() -> asyncResponse.resume( new HashMap()));
+        executorService.execute(() -> asyncResponse.resume(new HashMap()));
     }
 
-    //DELETE /todos/:todo_id/tasks/:task_id
     @DELETE
     @Path("/todos/{todo_id}/tasks/{task_id}")
     @Produces(MediaType.APPLICATION_JSON)
     public void deleteTodo(@Suspended final AsyncResponse asyncResponse,
-                           @PathParam("todo_id") String todoId ,
-                           @PathParam("task_id") String taskId ) {
+                           @PathParam("todo_id") String todoId,
+                           @PathParam("task_id") String taskId) {
         Map<String, Task> tasks = Optional.ofNullable(todos.get(todoId)).orElse(new Todo()).getTasks();
-        if(!tasks.containsKey(taskId)) {
+        if (!tasks.containsKey(taskId)) {
             throw new NotFoundException("can't found todo or task.");
         }
         tasks.remove(taskId);
-        executorService.execute(() -> asyncResponse.resume( new HashMap()));
+        executorService.execute(() -> asyncResponse.resume(new HashMap()));
     }
-
-
 }

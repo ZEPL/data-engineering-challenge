@@ -34,3 +34,13 @@ Evaluation of your submission will be based on the following criteria. Additiona
  4. What is a test coverage for your application
  5. How easy is to add more statistics alogorithm to it
  6. What is the performance of your application
+
+
+
+
+### RUN todo-chanllenge
+
+```shell
+mvn package
+java -jar target/todo-1.0-SNAPSHOT.jar --server.port=9999
+```

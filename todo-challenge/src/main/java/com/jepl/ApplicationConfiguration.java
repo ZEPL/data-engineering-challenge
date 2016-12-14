@@ -12,9 +12,7 @@ public class ApplicationConfiguration extends ResourceConfig {
     public ApplicationConfiguration() {
         super();
 
-        // Create a recursive package scanner
         PackageNamesScanner resourceFinder = new PackageNamesScanner(new String[]{"com.jepl.resources"}, true);
-        // Register the scanner with this Application
         registerFinder(resourceFinder);
         register(JacksonFeature.class);
     }
