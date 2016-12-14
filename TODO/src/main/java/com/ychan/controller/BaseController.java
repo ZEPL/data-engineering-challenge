@@ -7,11 +7,12 @@ public interface BaseController {
     return sendError(500, "Internal Server Error");
   }
 
-  default public Response sendError(String message) {
-    return sendError(500, message);
+  default public Response sendError(final String errorMessage) {
+    return sendError(500, errorMessage);
   }
 
-  default public Response sendError(int statusCode, String message) {
+  default public Response sendError(final int statusCode, final String errorMessage) {
+    final String message = "{\"error\":\"".concat(errorMessage).concat("\"}");
     return Response.status(statusCode).entity(message).build();
   }
 }
