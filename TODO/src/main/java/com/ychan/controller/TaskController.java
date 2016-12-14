@@ -107,7 +107,6 @@ public class TaskController implements BaseController {
 //  }
 
   @POST
-  @Path("/")
   public Response post(@PathParam("todoId") final String todoId, final String body) {
     String resJson = null;
     try {

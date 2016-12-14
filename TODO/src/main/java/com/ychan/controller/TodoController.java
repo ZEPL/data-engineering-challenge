@@ -1,5 +1,7 @@
 package com.ychan.controller;
 
+import java.util.Arrays;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -69,7 +71,6 @@ public class TodoController implements BaseController {
   }
 
   @GET
-  @Path("/")
   public Response get() {
     final Todo[] todos = todoService.getAll();
     String resJson = null;
@@ -83,7 +84,6 @@ public class TodoController implements BaseController {
   }
 
   @POST
-  @Path("/")
   public Response post(final String body) {
     String resJson = null;
     try {
