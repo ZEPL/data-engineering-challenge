@@ -1,13 +1,11 @@
-package com.jihoon.service;
+package com.jihoon.dao;
 
 import com.jihoon.model.Task;
 import com.jihoon.model.Todo;
 
 import java.util.List;
 
-public interface TodoService {
-    public List<Todo> getTodos();
-    public Todo createTodo(String name);
+public interface TaskDao {
     public List<Task> getTasks(String todoId);
     public Task createTask(String todoId, String name, String description);
     public Task getTask(String taskId);
