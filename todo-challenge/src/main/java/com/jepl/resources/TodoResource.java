@@ -1,151 +1,232 @@
 package com.jepl.resources;
 
+import com.google.inject.servlet.*;
+
+import com.jepl.annotations.*;
 import com.jepl.enums.*;
 import com.jepl.models.*;
+import com.jepl.utils.*;
 
+import org.slf4j.*;
+
+import java.io.*;
 import java.util.*;
-import java.util.concurrent.*;
 import java.util.stream.*;
 
 import javax.ws.rs.*;
-import javax.ws.rs.container.*;
 import javax.ws.rs.core.*;
 
-import jersey.repackaged.com.google.common.collect.*;
+import static org.eclipse.jetty.http.HttpStatus.INTERNAL_SERVER_ERROR_500;
 
 @Path("/")
+@RequestScoped
 public class TodoResource {
+    static final Logger logger = LoggerFactory.getLogger(TodoResource.class);
+    public static LinkedHashMap<String, Todo> todos;
 
-    private static final ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    static {
+        FileInputStream fileIn;
+        try {
+            if(new File("/tmp/todos.ser").exists()) {
+                fileIn = new FileInputStream("/tmp/todos.ser");
+                ObjectInputStream in = new ObjectInputStream(fileIn);
+                todos  = (LinkedHashMap) in.readObject();
+                in.close();
+                fileIn.close();
+            } else {
+                todos = new LinkedHashMap<>();
+            }
+        } catch (FileNotFoundException e) {
+            logger.error("file not found exeption {}", e);
+        } catch (ClassNotFoundException e) {
+            logger.error("class not found exeption {}", e);
+        } catch (IOException e) {
+            logger.error("io exeption {}", e);
+        }
 
-    private static final LinkedHashMap<String, Todo> todos = new LinkedHashMap<>();
+    }
 
     @GET
     @Path("/todos")
     @Produces(MediaType.APPLICATION_JSON)
-    public void todo(@Suspended final AsyncResponse asyncResponse) {
-        executorService.execute(() -> asyncResponse.resume(todos.values().stream().map(x -> x).collect(Collectors.toList())));
+    @EventLogger
+    public Response todos() {
+        List<Todo> resultTodos = todos.values().stream().map(x -> x).collect(Collectors.toList());
+        return ResponseUtil.okBuild(resultTodos);
     }
+
 
     @GET
     @Path("/todos/{todo_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public void todo(@Suspended final AsyncResponse asyncResponse, @PathParam("todo_id") String todo_id) {
-        executorService.execute(() -> asyncResponse.resume(todos.get(todo_id)));
+    @EventLogger
+    public Response getTodoByTodoId(@PathParam("todo_id") String todo_id) {
+        Todo todo = todos.get(todo_id);
+        if (Objects.isNull(todo)) {
+            return ResponseUtil.build(INTERNAL_SERVER_ERROR_500, new ErrorModel("Invalid todo id"));
+        }
+
+        return ResponseUtil.okBuild(todo);
     }
 
     @GET
     @Path("/todos/{todo_id}/tasks/{task_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public void getTodoByTodoIdAndTasksByTaskId(@Suspended final AsyncResponse asyncResponse,
-                                                @PathParam("todo_id") String todo_id,
-                                                @PathParam("task_id") String task_id) {
-        executorService.execute(() -> asyncResponse.resume(Optional.ofNullable(todos.get(todo_id)).orElse(new Todo()).getTasks().get(task_id)));
+    @EventLogger
+    public Response getTodoByTodoIdAndTasksByTaskId(@PathParam("todo_id") String todo_id,
+                                                    @PathParam("task_id") String task_id) {
+        Todo todo = todos.get(todo_id);
+        if (Objects.isNull(todo)) {
+            logger.error("Invalid todo id");
+            return ResponseUtil.errorBuild(new ErrorModel("Invalid todo id"));
+        }
+        Task task = todo.getTasks().get(task_id);
+        if (Objects.isNull(task)) {
+            logger.error("Invalid task id");
+            return ResponseUtil.errorBuild(new ErrorModel("Invalid task id"));
+        }
+
+        return ResponseUtil.okBuild(task);
     }
 
-    //GET /todos/:todo_id/tasks/done
     @GET
     @Path("/todos/{todo_id}/tasks/done")
     @Produces(MediaType.APPLICATION_JSON)
-    public void setDoneToTask(@Suspended final AsyncResponse asyncResponse,
-                              @PathParam("todo_id") String todo_id) {
-        executorService.execute(() -> asyncResponse.resume(Optional.ofNullable(todos.get(todo_id)).orElse(new Todo()).getTasks().values().stream().map(x -> {
-            x.setStatus(TaskStatus.DONE);
-            return x;
-        }).collect(Collectors.toList())));
+    @EventLogger
+    public Response setDoneToTask(@PathParam("todo_id") String todoId) {
+        Todo todo = todos.get(todoId);
+        if (Objects.isNull(todo)) {
+            logger.error("Invalid todo id");
+            return ResponseUtil.errorBuild(new ErrorModel("Invalid todo id"));
+        }
+        List<Task> tasks = setTaskStatusOfTodo(todo, TaskStatus.DONE);
+
+        return ResponseUtil.okBuild(tasks);
+    }
+
+    private List<Task> setTaskStatusOfTodo(Todo todo, TaskStatus status) {
+        return todo.getTasks().values().stream().map(task -> {
+            task.setStatus(status);
+            return task;
+        }).collect(Collectors.toList());
     }
 
     @GET
     @Path("/todos/{todo_id}/tasks/not-done")
     @Produces(MediaType.APPLICATION_JSON)
-    public void setNotDoneToTask(@Suspended final AsyncResponse asyncResponse,
-                                 @PathParam("todo_id") String todo_id) {
-        executorService.execute(() -> asyncResponse.resume(Optional.ofNullable(todos.get(todo_id)).orElse(new Todo()).getTasks().values().stream().map(x -> {
-            x.setStatus(TaskStatus.NOT_DONE);
-            return x;
-        }).collect(Collectors.toList())));
+    @EventLogger
+    public Response setNotDoneToTask(@PathParam("todo_id") String todoId) {
+        Todo todo = todos.get(todoId);
+        if (Objects.isNull(todo)) {
+            logger.error("Invalid todo id");
+            return ResponseUtil.errorBuild(new ErrorModel("Invalid todo id"));
+        }
+        List<Task> tasks = setTaskStatusOfTodo(todo, TaskStatus.NOT_DONE);
+
+        return ResponseUtil.okBuild(tasks);
     }
 
     @POST
     @Path("/todos")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void createTodo(@Suspended final AsyncResponse asyncResponse,
-                           Todo todo) {
-        if (Objects.isNull(todo)) {
-            executorService.execute(() -> asyncResponse.resume(Lists.newArrayList()));
+    @EventLogger
+    public Response createTodo(Todo paramTodo) {
+        if (Objects.isNull(paramTodo)) {
+            logger.error("todo paramter is null");
+            return ResponseUtil.errorBuild(new ErrorModel("todo parameter is null"));
         }
-        Todo aTodo = new Todo(todo.getName());
+        Todo todo = new Todo(paramTodo.getName());
 
-        aTodo.setName(todo.getName());
-        todos.put(aTodo.getId(), aTodo);
-        executorService.execute(() -> asyncResponse.resume(aTodo));
+        todo.setName(paramTodo.getName());
+        todos.put(todo.getId(), todo);
+        return ResponseUtil.okBuild(todo);
     }
 
-    //POST /todos/:todo_id/tasks
     @POST
     @Path("/todos/{todo_id}/tasks")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void createTask(@Suspended final AsyncResponse asyncResponse,
-                           @PathParam("todo_id") String todoId,
-                           Task task) {
-        if (Objects.isNull(task)) {
-            executorService.execute(() -> asyncResponse.resume(null));
+    @EventLogger
+    public Response createTask(@PathParam("todo_id") String todoId,
+                               Task paramTask) {
+        if (Objects.isNull(paramTask)) {
+            logger.error("task paramter is null");
+            return ResponseUtil.errorBuild(new ErrorModel("task parameter is null"));
         }
-        Todo todo = Optional.ofNullable(todos.get(todoId)).orElse(new Todo());
+        Todo todo = todos.get(todoId);
+        if (Objects.isNull(todo)) {
+            logger.error("Invalid todo id");
+            return ResponseUtil.errorBuild(new ErrorModel("Invalid todo id"));
+        }
         Map<String, Task> tasks = todo.getTasks();
-        Task aTask = new Task(task.getName(), task.getDescription());
-        tasks.put(aTask.getId(), aTask);
-        todo.getTasks().put(aTask.getId(), aTask);
-        todos.put(aTask.getId(), todo);
-        executorService.execute(() -> asyncResponse.resume(aTask));
+        Task task = new Task(paramTask.getName(), paramTask.getDescription());
+        tasks.put(task.getId(), task);
+        todo.getTasks().put(task.getId(), task);
+        todos.put(task.getId(), todo);
+        return ResponseUtil.okBuild(task);
     }
 
     @PUT
     @Path("/todos/{todo_id}/tasks/{task_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void updateTask(@Suspended final AsyncResponse asyncResponse,
-                           @PathParam("todo_id") String todoId,
-                           @PathParam("task_id") String taskId,
-                           Task paramTask) {
+    @EventLogger
+    public Response updateTask(@PathParam("todo_id") String todoId,
+                               @PathParam("task_id") String taskId,
+                               Task paramTask) {
         if (Objects.isNull(paramTask)) {
-            executorService.execute(() -> asyncResponse.resume(null));
+            logger.error("task parameter is null");
+            return ResponseUtil.errorBuild(new ErrorModel("task parameter is null"));
         }
-        Todo todo = Optional.ofNullable(todos.get(todoId)).orElse(new Todo());
+
+        Todo todo = todos.get(todoId);
+        if (Objects.isNull(todo)) {
+            logger.error("Invalid todo id");
+            return ResponseUtil.errorBuild(new ErrorModel("Invalid todo id"));
+        }
+
         Map<String, Task> tasks = todo.getTasks();
-        Task aTask = tasks.get(taskId);
-        aTask.setName(paramTask.getName());
-        aTask.setDescription(paramTask.getDescription());
-        aTask.setStatus(paramTask.getStatus());
-        executorService.execute(() -> asyncResponse.resume(aTask));
+        Task task = tasks.get(taskId);
+        task.setName(paramTask.getName());
+        task.setDescription(paramTask.getDescription());
+        task.setStatus(paramTask.getStatus());
+        return ResponseUtil.okBuild(task);
     }
 
     @DELETE
     @Path("/todos/{todo_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public void deleteTodo(@Suspended final AsyncResponse asyncResponse,
-                           @PathParam("todo_id") String todoId) {
+    @EventLogger
+    public Response deleteTodo(@PathParam("todo_id") String todoId) {
         if (!todos.containsKey(todoId)) {
-            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
-
+            logger.error("Invalid todo id");
+            return ResponseUtil.errorBuild(new ErrorModel("Invalid todo id"));
         }
         todos.remove(todoId);
-        executorService.execute(() -> asyncResponse.resume(new HashMap()));
+        return ResponseUtil.okBuild(Collections.EMPTY_MAP);
     }
 
     @DELETE
     @Path("/todos/{todo_id}/tasks/{task_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public void deleteTodo(@Suspended final AsyncResponse asyncResponse,
-                           @PathParam("todo_id") String todoId,
-                           @PathParam("task_id") String taskId) {
-        Map<String, Task> tasks = Optional.ofNullable(todos.get(todoId)).orElse(new Todo()).getTasks();
+    @EventLogger
+    public Response deleteTodo(@PathParam("todo_id") String todoId,
+                               @PathParam("task_id") String taskId) {
+        if (!todos.containsKey(todoId)) {
+            logger.error("Invalid todo id");
+            return ResponseUtil.errorBuild(new ErrorModel("Invalid todo id"));
+        }
+        Map<String, Task> tasks = todos.get(todoId).getTasks();
+
         if (!tasks.containsKey(taskId)) {
-            throw new NotFoundException("can't found todo or task.");
+            return ResponseUtil.errorBuild(new ErrorModel("Invalid task id"));
         }
         tasks.remove(taskId);
-        executorService.execute(() -> asyncResponse.resume(new HashMap()));
+        return ResponseUtil.okBuild(Collections.EMPTY_MAP);
     }
 }
+
+
+
+
