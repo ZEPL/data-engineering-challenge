@@ -5,7 +5,7 @@ import com.ychan.DBManager;
 import com.ychan.DBManager.NotExistException;
 import com.ychan.dto.Todo;
 
-public class TodoDao implements Dao<Todo> {
+public class TodoDao implements BaseDao<Todo> {
 
   public Object[] getAll() {
     final DBManager db = DBManager.getInstance();

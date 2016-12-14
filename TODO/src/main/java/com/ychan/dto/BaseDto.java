@@ -3,7 +3,7 @@ package com.ychan.dto;
 import java.text.MessageFormat;
 import java.util.UUID;
 
-public interface Dto {
+public interface BaseDto {
   default String makeId(final String entity) {
     Object[] params = new Object[]{
         entity,

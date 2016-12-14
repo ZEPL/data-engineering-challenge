@@ -5,7 +5,7 @@ import com.ychan.DBManager;
 import com.ychan.DBManager.NotExistException;
 import com.ychan.dto.Task;
 
-public class TaskDao implements Dao<Task> {
+public class TaskDao implements BaseDao<Task> {
 
   @Override
   public Object[] getAll() {

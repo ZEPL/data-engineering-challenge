@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class Task implements Dto {
+public class Task implements BaseDto {
   public static String NOT_DONE = "NOT_DONE";
   public static String DONE = "DONE";
   public String id;
