@@ -2,8 +2,6 @@ package com.ychan.service;
 
 import java.util.Arrays;
 
-import javax.ws.rs.core.Response;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.inject.Inject;
 import com.ychan.DBManager.NotExistException;

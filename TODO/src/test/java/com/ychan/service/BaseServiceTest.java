@@ -5,6 +5,7 @@ import java.net.URI;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 
+import org.eclipse.jetty.server.Server;
 import org.junit.After;
 import org.junit.Before;
 
@@ -28,8 +29,9 @@ public class BaseServiceTest {
 
   @Before
   public void startServer() throws Exception {
-    app = new App();
-    app.init(PORT_NUM, false);
+    Server server = new Server(PORT_NUM);
+    app = new App(server);
+    app.init(false);
 
     mapper = new ObjectMapper();
     mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
