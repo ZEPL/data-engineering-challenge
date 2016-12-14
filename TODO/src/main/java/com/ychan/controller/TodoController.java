@@ -105,9 +105,13 @@ public class TodoController implements BaseController {
   }
 
   @DELETE
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response delete() {
-    // TODO Auto-generated method stub
-    return null;
+  @Path("{id}")
+  public Response delete(@PathParam("id") final String id) {
+    todoService.delete(id);
+    Task[] tasks = taskService.getAll(id);
+    Arrays.stream(tasks)
+        .map(task->task.getId())
+        .forEach(taskService::delete);
+    return Response.status(200).entity("{}").build();
   }
 }

@@ -31,8 +31,7 @@ public class TodoService implements BaseService{
     dao.put(todo.id, todo);
   }
 
-  public Response delete() {
-    // TODO Auto-generated method stub
-    return null;
+  public void delete(final String todoId) {
+    dao.del(todoId);
   }
 }

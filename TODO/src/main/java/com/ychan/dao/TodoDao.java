@@ -12,17 +12,16 @@ public class TodoDao implements Dao<Todo> {
     return db.getPattern(Todo.class.getName(), Todo.class);
   }
 
-  public Todo getById(String id) throws NotExistException, Exception {
-    return DBManager.getInstance().get(id, Todo.class);
+  public Todo getById(final String key) throws NotExistException, Exception {
+    return DBManager.getInstance().get(key, Todo.class);
   }
 
-  public void put(String key, Todo value) throws JsonProcessingException {
+  public void put(final String key, final Todo value) throws JsonProcessingException {
     DBManager.getInstance().put(key, value);
   }
 
-  public void del(String key) {
-    // TODO Auto-generated method stub
-
+  public void del(final String key) {
+    DBManager.getInstance().del(key);
   }
 
 }

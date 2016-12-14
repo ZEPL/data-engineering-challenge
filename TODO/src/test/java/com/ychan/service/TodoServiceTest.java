@@ -22,6 +22,10 @@ public class TodoServiceTest extends BaseServiceTest{
   // mock data
   final Todo mockTodoToday = new Todo("today");
   final Todo mockTodoTomorrow = new Todo("tomorrow");
+  final Task mockTaskWorking =
+      new Task("working", "work hard", Task.NOT_DONE, mockTodoToday.getId());
+  final Task mockTaskMeeting =
+      new Task("meeting", "at 12pm", Task.DONE, mockTodoToday.getId());
 
   @Test
   public void testGetAll() throws JsonParseException, JsonMappingException, IOException {
@@ -79,13 +83,7 @@ public class TodoServiceTest extends BaseServiceTest{
 //  }
   @Test
   public void testGetById() throws IOException {
-    final Todo mockTodo = new Todo("todo");
-    final Task mockTaskWorking =
-        new Task("working", "work hard", Task.NOT_DONE, mockTodo.getId());
-    final Task mockTaskMeeting =
-        new Task("meeting", "at 12pm", Task.DONE, mockTodo.getId());
-
-    final String addr = MessageFormat.format("{0}/{1}", "todos", mockTodo.getId());
+    final String addr = MessageFormat.format("{0}/{1}", "todos", mockTodoToday.getId());
     Task[] expected = { mockTaskWorking, mockTaskMeeting };
     Arrays.sort(expected, (Object a, Object b) -> {
       return ((Task) a).name.compareTo(((Task) b).name);
@@ -93,7 +91,7 @@ public class TodoServiceTest extends BaseServiceTest{
 
     DBManager db = DBManager.getInstance();
     db.flushAll();
-    db.put(mockTodo.getId(), mockTodo);
+    db.put(mockTodoToday.getId(), mockTodoToday);
     Arrays.stream(expected).forEach(todo -> {
       try {
         db.put(todo.id, todo);
@@ -132,5 +130,43 @@ public class TodoServiceTest extends BaseServiceTest{
     // test database
     Todo actual = DBManager.getInstance().get(responsed.id, Todo.class);
     assertEquals(mockName, actual.name);
+  }
+
+  @Test
+  public void testDelete() throws IOException {
+    final String addr = MessageFormat.format("{0}/{1}", "todos", mockTodoToday.getId());
+    final Task[] tasks = {mockTaskMeeting, mockTaskWorking};
+
+    DBManager db = DBManager.getInstance();
+    db.put(mockTodoToday.getId(), mockTodoToday);
+    Arrays.stream(tasks).forEach(todo -> {
+      try {
+        db.put(todo.id, todo);
+      } catch (JsonProcessingException e) {
+        e.printStackTrace();
+        fail();
+      }
+    });
+
+    final ClientResponse res = sendRequest(addr, "DELETE");
+    assertEquals(200, res.getStatus());
+
+    try {
+      db.get(mockTodoToday.getId(), Todo.class);
+      Arrays.stream(tasks)
+      .forEach(task -> {
+        try {
+          db.get(task.getId(), Task.class);
+        } catch (NotExistException e) {
+          // PASS
+        } catch (IOException e) {
+          fail();
+        }
+      });
+    } catch (NotExistException e) {
+      // PASS
+      return;
+    }
+    fail();
   }
 }

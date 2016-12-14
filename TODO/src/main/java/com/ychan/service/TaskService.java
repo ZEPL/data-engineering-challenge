@@ -20,8 +20,8 @@ public class TaskService implements BaseService {
     dao.put(task.id, task);
   }
 
-  public Task getById(final String id) throws NotExistException, Exception {
-    return dao.getById(id);
+  public Task getById(final String key) throws NotExistException, Exception {
+    return dao.getById(key);
   }
 
   public Task[] getAll(final String todoId) {
