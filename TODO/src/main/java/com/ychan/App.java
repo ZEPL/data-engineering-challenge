@@ -1,8 +1,14 @@
 package com.ychan;
 
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
+
+import org.eclipse.jetty.server.NCSARequestLog;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+
 import com.google.inject.servlet.GuiceFilter;
 import com.ychan.config.AppConfig;
 
@@ -33,9 +39,12 @@ public class App {
     ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
     contextHandler.setContextPath("/");
     contextHandler.addEventListener(new AppConfig());
-    contextHandler.addFilter(GuiceFilter.class, "/*", null);
+    contextHandler.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
     contextHandler.addServlet(DefaultServlet.class, "/"); // for 404
     server.setHandler(contextHandler);
+
+    NCSARequestLog requestLog = new NCSARequestLog();
+    server.setRequestLog(requestLog);
 
     server.start();
     if(sync) server.join();
