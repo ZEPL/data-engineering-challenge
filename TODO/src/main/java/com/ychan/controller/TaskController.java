@@ -1,6 +1,7 @@
 package com.ychan.controller;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -164,4 +165,17 @@ public class TaskController implements BaseController {
     return Response.status(200).entity(resJson).build();
   }
 
+  @DELETE
+  @Path("{taskId}")
+  public Response delete(@PathParam("todoId") final String todoId, @PathParam("taskId") final String taskId) {
+    try {
+      if(!existTodo(todoId))
+        return BaseController.super.sendError(400, "No Todo");
+    } catch (Exception e) {
+      e.printStackTrace();
+      return BaseController.super.sendError();
+    }
+    taskService.delete(taskId);
+    return Response.status(200).entity("{}").build();
+  }
 }

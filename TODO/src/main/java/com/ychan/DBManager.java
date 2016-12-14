@@ -84,7 +84,7 @@ public class DBManager {
 
   public void del(final String... keys) {
     final Jedis jedis = pool.getResource();
-    Arrays.stream(keys).map(jedis::del);
+    Arrays.stream(keys).forEach(jedis::del);
     jedis.save();
     jedis.close();
   }

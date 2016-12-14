@@ -163,8 +163,9 @@ public class TaskServiceTest extends BaseServiceTest{
 
   @Test
   public void testDelete() throws JsonProcessingException {
-    DBManager.getInstance().put(mockTaskWorking.getId(), mockTodo);
+    DBManager.getInstance().put(mockTodo.getId(), mockTodo);
     DBManager.getInstance().put(mockTaskWorking.getId(), mockTaskWorking);
+
     final String addr = MessageFormat.format("{0}/{1}/{2}/{3}",
         "todos", mockTodo.getId(), "tasks", mockTaskWorking.getId());
     final ClientResponse res = sendRequest(addr, "DELETE");

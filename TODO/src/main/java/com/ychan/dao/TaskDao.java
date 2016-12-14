@@ -14,19 +14,17 @@ public class TaskDao implements Dao<Task> {
   }
 
   @Override
-  public Task getById(String id) throws NotExistException, Exception {
+  public Task getById(final String id) throws NotExistException, Exception {
     return DBManager.getInstance().get(id, Task.class);
   }
 
   @Override
-  public void put(String key, Task value) throws JsonProcessingException {
+  public void put(final String key, final Task value) throws JsonProcessingException {
     DBManager.getInstance().put(key, value);
   }
 
   @Override
-  public void del(String key) {
-    // TODO Auto-generated method stub
-    
+  public void del(final String key) {
+    DBManager.getInstance().del(key);
   }
-
 }

@@ -38,4 +38,8 @@ public class TaskService implements BaseService {
         .filter(task -> task.status.equals(status))
         .toArray(Task[]::new);
   }
+
+  public void delete(final String taskId) {
+    dao.del(taskId);
+  }
 }
