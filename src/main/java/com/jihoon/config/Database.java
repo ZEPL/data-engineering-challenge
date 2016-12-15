@@ -8,8 +8,6 @@ import com.mongodb.client.MongoDatabase;
 
 public class Database {
 
-    private String serverUrl;
-    private String serverPort;
     private String dbServerUrl;
     private String dbServerPort;
     private String username;
@@ -21,8 +19,6 @@ public class Database {
 
     @Inject
     public Database(Configuration config){
-        this.serverUrl = config.getDatabase();
-        this.serverPort = config.getDatabase();
         this.dbServerUrl = config.getDbServerUrl();
         this.dbServerPort = config.getDbServerPort();
         this.username = config.getDatabaseUser();
@@ -33,7 +29,7 @@ public class Database {
     }
 
     public void init(){
-        String mongoUrl = "mongodb://"+username+":"+password+"@"+serverUrl+":"+serverPort+"/"+databaseName;
+        String mongoUrl = "mongodb://"+username+":"+password+"@"+dbServerUrl+":"+dbServerPort+"/"+databaseName;
         MongoClientURI uri = new MongoClientURI(mongoUrl);
         MongoClient mongoClient = new MongoClient(uri);
 
@@ -58,22 +54,6 @@ public class Database {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getServerUrl() {
-        return serverUrl;
-    }
-
-    public void setServerUrl(String serverUrl) {
-        this.serverUrl = serverUrl;
-    }
-
-    public String getServerPort() {
-        return serverPort;
-    }
-
-    public void setServerPort(String serverPort) {
-        this.serverPort = serverPort;
     }
 
     public String getDatabaseName() {
