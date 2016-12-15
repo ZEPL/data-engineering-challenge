@@ -8,6 +8,10 @@ import com.mongodb.client.MongoDatabase;
 
 public class Database {
 
+    private String serverUrl;
+    private String serverPort;
+    private String dbServerUrl;
+    private String dbServerPort;
     private String username;
     private String password;
     private String databaseName;
@@ -17,6 +21,10 @@ public class Database {
 
     @Inject
     public Database(Configuration config){
+        this.serverUrl = config.getDatabase();
+        this.serverPort = config.getDatabase();
+        this.dbServerUrl = config.getDbServerUrl();
+        this.dbServerPort = config.getDbServerPort();
         this.username = config.getDatabaseUser();
         this.password = config.getDatabasePassword();
         this.databaseName = config.getDatabase();
@@ -25,11 +33,11 @@ public class Database {
     }
 
     public void init(){
-        String mongoUrl = "mongodb://"+username+":"+password+"@ds133358.mlab.com:33358/zepl";
+        String mongoUrl = "mongodb://"+username+":"+password+"@"+serverUrl+":"+serverPort+"/"+databaseName;
         MongoClientURI uri = new MongoClientURI(mongoUrl);
         MongoClient mongoClient = new MongoClient(uri);
 
-        this.database = mongoClient.getDatabase("zepl");
+        this.database = mongoClient.getDatabase(databaseName);
         this.todoCollection = database.getCollection("todos");
         this.taskCollection = database.getCollection("tasks");
 
@@ -50,6 +58,22 @@ public class Database {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getServerUrl() {
+        return serverUrl;
+    }
+
+    public void setServerUrl(String serverUrl) {
+        this.serverUrl = serverUrl;
+    }
+
+    public String getServerPort() {
+        return serverPort;
+    }
+
+    public void setServerPort(String serverPort) {
+        this.serverPort = serverPort;
     }
 
     public String getDatabaseName() {

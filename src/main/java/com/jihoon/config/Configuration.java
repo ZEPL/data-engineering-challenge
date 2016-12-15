@@ -12,6 +12,8 @@ public class Configuration {
 
     private String serverAddress;
     private String serverPort;
+    private String dbServerUrl;
+    private String dbServerPort;
     private String database;
     private String databaseUser;
     private String databasePassword;
@@ -36,7 +38,9 @@ public class Configuration {
             String address = prop.getProperty("address");
             String port = prop.getProperty("port");
 
-            String database = prop.getProperty("Database");
+            String dbServerUrl = prop.getProperty("dbserverurl");
+            String dbServerPort = prop.getProperty("dbserverport");
+            String database = prop.getProperty("database");
             String dbuser = prop.getProperty("dbuser");
             String dbpassword = prop.getProperty("dbpassword");
 
@@ -48,6 +52,8 @@ public class Configuration {
 
             this.setServerAddress(address);
             this.setServerPort(port);
+            this.setDbServerUrl(dbServerUrl);
+            this.setDbServerPort(dbServerPort);
             this.setDatabase(database);
             this.setDatabaseUser(dbuser);
             this.setDatabasePassword(dbpassword);
@@ -77,6 +83,22 @@ public class Configuration {
         return database;
     }
 
+    public String getDbServerUrl() {
+        return dbServerUrl;
+    }
+
+    public void setDbServerUrl(String dbServerUrl) {
+        this.dbServerUrl = dbServerUrl;
+    }
+
+    public String getDbServerPort() {
+        return dbServerPort;
+    }
+
+    public void setDbServerPort(String dbServerPort) {
+        this.dbServerPort = dbServerPort;
+    }
+
     public void setDatabase(String database) {
         this.database = database;
     }
@@ -96,4 +118,6 @@ public class Configuration {
     public void setDatabasePassword(String databasePassword) {
         this.databasePassword = databasePassword;
     }
+
+
 }
