@@ -11,12 +11,8 @@ import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
 import java.util.EnumSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class app {
-
-    final static Logger logger = LoggerFactory.getLogger(app.class);
 
     public static void main(String[] args) throws Exception {
 
