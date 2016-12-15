@@ -16,12 +16,11 @@ import static org.junit.Assert.assertNotNull;
 
 
 public class TodoResourceTest {
-    private static final String PORT = "9999";
+//    private static final String PORT = "9999";
     private final Client client = ClientBuilder.newClient();
 
     @BeforeClass
     public static void init() throws Exception {
-        System.setProperty("port", PORT);
         Main.main(new String[0]);
     }
 
@@ -31,7 +30,7 @@ public class TodoResourceTest {
     }
 
     private WebTarget createWebTarget(String path) {
-        return client.target("http://localhost:" + PORT).path(path);
+        return client.target("http://localhost:8080").path(path);
     }
 
     @Test
