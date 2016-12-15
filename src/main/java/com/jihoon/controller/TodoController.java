@@ -141,29 +141,66 @@ public class TodoController {
 		return Response.status(201).entity(newTask).build();
 	}
 
-	@POST
+	@PUT
 	@Path("/{todo_id}/tasks/{task_id}")
-	public Response createTask(@PathParam("todo_id") String todoId) {
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getTask(@PathParam("todo_id") String todoId, @PathParam("task_id") String taskId, Task taskJson) {
 
-		String output = "createTask";
-		return Response.status(200).entity(output).build();
+		try {
+
+			String name = taskJson.getName();
+			String description = taskJson.getDescription();
+			String status = taskJson.getStatus();
+
+			System.out.println("todo_id : " + todoId);
+			System.out.println("task_id : " + taskId);
+			System.out.println("taskJson : " + taskJson);
+			System.out.println("name : " + name);
+			System.out.println("description : " + description);
+			System.out.println("status : " + status);
+
+			Task task = todoService.updateTask(taskId, name , description, status);
+			String jsonInString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(task);
+
+			return Response.status(200).entity(jsonInString).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(500).build();
+		}
 	}
-
 
 	@DELETE
 	@Path("/{todo_id}")
 	public Response deleteTodo(@PathParam("todo_id") String todoId) {
 
-		String output = "deleteTodo";
-		return Response.status(200).entity(output).build();
+		try {
+			Boolean result = todoService.deleteTodo(todoId);
+
+			if(result)
+				return Response.status(200).entity("{}").build();
+			else
+				return Response.status(500).entity("{}").build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(500).build();
+		}
 	}
 
 	@DELETE
 	@Path("/{todo_id}/tasks/{task_id}")
 	public Response deleteTask(@PathParam("todo_id") String todoId, @PathParam("task_id") String taskId) {
 
-		String output = "deleteTask";
-		return Response.status(200).entity(output).build();
-	}
+		try {
+			Boolean result = todoService.deleteTask(taskId);
 
+			if(result)
+				return Response.status(200).entity("{}").build();
+			else
+				return Response.status(500).entity("{}").build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(500).build();
+		}
+	}
 }

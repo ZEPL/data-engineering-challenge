@@ -2,12 +2,13 @@ package com.jihoon.dao;
 
 import com.google.inject.Inject;
 import com.jihoon.config.Database;
-import com.jihoon.model.Task;
 import com.jihoon.model.Todo;
 import com.mongodb.Block;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,5 +82,18 @@ public class TodoDaoImpl implements TodoDao {
         });
 
         return todo;
+    }
+
+    public Boolean deleteTodo(String todoId){
+
+        MongoCollection<Document> collection = database.getTodoCollection();
+
+        Bson filter = new Document("_id", new ObjectId(todoId));
+        DeleteResult deleteResult = collection.deleteOne(filter);
+
+        if(deleteResult.getDeletedCount() == 1)
+            return true;
+        else
+            return false;
     }
 }

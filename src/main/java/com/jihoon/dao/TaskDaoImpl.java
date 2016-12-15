@@ -3,11 +3,14 @@ package com.jihoon.dao;
 import com.google.inject.Inject;
 import com.jihoon.config.Database;
 import com.jihoon.model.Task;
-import com.jihoon.model.Todo;
 import com.mongodb.Block;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.FindOneAndUpdateOptions;
+import com.mongodb.client.model.ReturnDocument;
+import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 public class TaskDaoImpl implements TaskDao {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -25,7 +29,7 @@ public class TaskDaoImpl implements TaskDao {
 
 
     @Inject
-    public void TodoDao(Database database){
+    public void TaskDao(Database database){
         this.database = database;
     }
 
@@ -172,5 +176,60 @@ public class TaskDaoImpl implements TaskDao {
             taskList.add(new Task(id,name,description,status,created));
         });
         return taskList;
+    }
+
+    public Task updateTask(String taskId, String name, String description, String status){
+
+        logger.debug("taskId : "+ taskId);
+        logger.debug("name : "+ name);
+        logger.debug("description : "+ description);
+        logger.debug("status : "+ status);
+
+        Task task = new Task();
+        MongoCollection<Document> collection = database.getTaskCollection();
+
+        FindOneAndUpdateOptions options = new FindOneAndUpdateOptions()
+                .upsert(true)
+                .returnDocument(ReturnDocument.AFTER);
+
+        Bson newDocument = new Document("$set", new Document("name", name).append("description", description).append("status", status));
+        Bson filter = new Document("_id", new ObjectId(taskId));
+        Document document = collection.findOneAndUpdate(filter, newDocument, options);
+
+        logger.debug(document.toString());
+        String id = document.get("_id").toString();
+        String todoId = document.get("todoId").toString();
+        String newName = document.get("name").toString();
+        String newDescription = document.get("description").toString();
+        String newStatus = document.get("status").toString();
+        String created = document.get("created").toString();
+
+        logger.debug("new id : "+ id);
+        logger.debug("new todoId : "+ todoId);
+        logger.debug("new name : "+ name);
+        logger.debug("new description : "+ description);
+        logger.debug("new status : "+ status);
+        logger.debug("new created : "+ created);
+
+        task.setId(id);
+        task.setName(newName);
+        task.setDescription(newDescription);
+        task.setStatus(newStatus);
+        task.setCreated(created);
+
+        return task;
+    }
+
+    public Boolean deleteTask(String taskId){
+
+        MongoCollection<Document> collection = database.getTaskCollection();
+
+        Bson filter = new Document("_id", new ObjectId(taskId));
+        DeleteResult deleteResult = collection.deleteOne(filter);
+
+        if(deleteResult.getDeletedCount() == 1)
+            return true;
+        else
+            return false;
     }
 }

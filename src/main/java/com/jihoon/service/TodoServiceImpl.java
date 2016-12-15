@@ -24,6 +24,9 @@ public class TodoServiceImpl implements TodoService {
         return todoDao.createTodo(name);
     }
 
+    public Boolean deleteTodo(String todoId) { return todoDao.deleteTodo(todoId); }
+
+
     public List<Task> getTasks(String todoId){
         return taskDao.getTasks(todoId);
     }
@@ -31,6 +34,8 @@ public class TodoServiceImpl implements TodoService {
     public Task createTask(String todoId, String name, String description){
         return taskDao.createTask(todoId, name, description);
     }
+
+    public Boolean deleteTask(String taskId) { return taskDao.deleteTask(taskId); }
 
     public Task getTask(String taskId){
         return taskDao.getTask(taskId);
@@ -42,5 +47,9 @@ public class TodoServiceImpl implements TodoService {
 
     public List<Task> getTasksNotDone(String taskId){
         return taskDao.getTasksNotDone(taskId);
+    }
+
+    public Task updateTask(String taskId, String name, String description, String status){
+        return taskDao.updateTask(taskId, name, description, status);
     }
 }

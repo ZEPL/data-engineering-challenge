@@ -8,4 +8,5 @@ import java.util.List;
 public interface TodoDao {
     public List<Todo> getTodos();
     public Todo createTodo(String name);
+    public Boolean deleteTodo(String todoId);
 }

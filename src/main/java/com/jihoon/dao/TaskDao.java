@@ -11,4 +11,6 @@ public interface TaskDao {
     public Task getTask(String taskId);
     public List<Task> getTasksDone(String todoId);
     public List<Task> getTasksNotDone(String todoId);
+    public Task updateTask(String taskId, String name, String description, String status);
+    public Boolean deleteTask(String taskId);
 }
