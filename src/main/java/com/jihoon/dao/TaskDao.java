@@ -1,16 +1,15 @@
 package com.jihoon.dao;
 
 import com.jihoon.model.Task;
-import com.jihoon.model.Todo;
 
 import java.util.List;
 
 public interface TaskDao {
-    public List<Task> getTasks(String todoId);
-    public Task createTask(String todoId, String name, String description);
-    public Task getTask(String taskId);
-    public List<Task> getTasksDone(String todoId);
-    public List<Task> getTasksNotDone(String todoId);
-    public Task updateTask(String taskId, String name, String description, String status);
-    public Boolean deleteTask(String taskId);
+    List<Task> getTasks(String todoId);
+    Task createTask(String todoId, String name, String description);
+    Task getTask(String taskId);
+    List<Task> getTasksDone(String todoId);
+    List<Task> getTasksNotDone(String todoId);
+    Task updateTask(String taskId, String name, String description, String status);
+    Boolean deleteTask(String taskId);
 }

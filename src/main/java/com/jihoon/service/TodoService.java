@@ -6,16 +6,16 @@ import com.jihoon.model.Todo;
 import java.util.List;
 
 public interface TodoService {
-    public List<Todo> getTodos();
-    public Todo createTodo(String name);
-    public Boolean deleteTodo(String todoId);
+    List<Todo> getTodos();
+    Todo createTodo(String name);
+    Boolean deleteTodo(String todoId);
 
-    public List<Task> getTasks(String todoId);
-    public Task createTask(String todoId, String name, String description);
-    public Boolean deleteTask(String todoId);
+    List<Task> getTasks(String todoId);
+    Task createTask(String todoId, String name, String description);
+    Boolean deleteTask(String todoId);
 
-    public Task getTask(String taskId);
-    public List<Task> getTasksDone(String todoId);
-    public List<Task> getTasksNotDone(String todoId);
-    public Task updateTask(String taskId, String name, String description, String status);
+    Task getTask(String taskId);
+    List<Task> getTasksDone(String todoId);
+    List<Task> getTasksNotDone(String todoId);
+    Task updateTask(String taskId, String name, String description, String status);
 }
