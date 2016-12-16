@@ -38,7 +38,6 @@ public class Main {
         ServletHandler handler = new ServletHandler();
         FilterHolder filterHolder = handler.addFilterWithMapping(GuiceFilter.class, "/*", EnumSet.of(DispatcherType.INCLUDE, DispatcherType.REQUEST));
         filterHolder.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true");
-//        handler.addServletWithMapping(TestServlet.class, "/*");
         context.addEventListener(new GuiceServletConfig());
         context.setServletHandler(handler);
         context.setParentLoaderPriority(true);

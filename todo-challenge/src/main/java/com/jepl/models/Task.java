@@ -69,6 +69,13 @@ public class Task implements Serializable {
         this.created = created;
     }
 
+
+    public void update(Task task) {
+        this.name = task.getName();
+        this.description = task.getDescription();
+        this.status = task.getStatus();
+    }
+
     @Override
     public String toString() {
         return "Task{" +
