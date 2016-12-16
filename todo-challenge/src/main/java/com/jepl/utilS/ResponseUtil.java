@@ -23,20 +23,12 @@ public class ResponseUtil {
 
     public static Response okBuild(Object obj) {
         if(obj instanceof List) {
-            FileOutputStream fileOut = null;
             try {
-                fileOut = new FileOutputStream("/tmp/todos.ser");
-                ObjectOutputStream out = new ObjectOutputStream(fileOut);
-                out.writeObject(TodoResource.todos);
-                out.close();
-                fileOut.close();
-            } catch (FileNotFoundException e) {
-                logger.error("file not found exception. {}", e);
+                String jsonString = JsonUtil.writeValueAsString(TodoResource.todos);
+                FileUtil.writeString("/tmp/todos.json", jsonString);
             } catch (IOException e) {
-                logger.error("io exception. {}", e);
+                logger.error("can't write json {}", e);
             }
-
-
         }
 
         return Response.status(OK).entity(obj).build();

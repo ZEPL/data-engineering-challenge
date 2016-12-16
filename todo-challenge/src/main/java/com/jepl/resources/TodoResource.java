@@ -2,6 +2,7 @@ package com.jepl.resources;
 
 import com.google.inject.servlet.*;
 
+import com.fasterxml.jackson.core.type.*;
 import com.jepl.annotations.*;
 import com.jepl.enums.*;
 import com.jepl.models.*;
@@ -16,6 +17,7 @@ import java.util.stream.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
+
 import static org.eclipse.jetty.http.HttpStatus.NOT_FOUND_404;
 
 @Path("/")
@@ -27,23 +29,17 @@ public class TodoResource {
     static {
         FileInputStream fileIn;
         try {
-            if(new File("/tmp/todos.ser").exists()) {
-                fileIn = new FileInputStream("/tmp/todos.ser");
-                ObjectInputStream in = new ObjectInputStream(fileIn);
-                todos  = (LinkedHashMap) in.readObject();
-                in.close();
-                fileIn.close();
+            if(new File("/tmp/todos.json").exists()) {
+                String jsonString = FileUtil.readString("/tmp/todos.json");
+                todos = JsonUtil.readValue(jsonString, new TypeReference<LinkedHashMap<String, Todo>>() {});
             } else {
                 todos = new LinkedHashMap<>();
             }
         } catch (FileNotFoundException e) {
             logger.error("file not found exeption {}", e);
-        } catch (ClassNotFoundException e) {
-            logger.error("class not found exeption {}", e);
         } catch (IOException e) {
             logger.error("io exeption {}", e);
         }
-
     }
 
     @GET
