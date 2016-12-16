@@ -99,12 +99,12 @@ public class TodoResource {
             logger.error("Invalid todo id");
             return ResponseUtil.errorBuild(new ErrorModel("Invalid todo id"));
         }
-        List<Task> tasks = setTaskStatusOfTodo(todo, TaskStatus.DONE);
+        List<Task> tasks = getAllTaskUpdatedStatus(todo, TaskStatus.DONE);
 
         return ResponseUtil.okBuild(tasks);
     }
 
-    private List<Task> setTaskStatusOfTodo(Todo todo, TaskStatus status) {
+    private List<Task> getAllTaskUpdatedStatus(Todo todo, TaskStatus status) {
         return todo.getTasks().values().stream().map(task -> {
             task.setStatus(status);
             return task;
@@ -121,7 +121,7 @@ public class TodoResource {
             logger.error("Invalid todo id");
             return ResponseUtil.errorBuild(new ErrorModel("Invalid todo id"));
         }
-        List<Task> tasks = setTaskStatusOfTodo(todo, TaskStatus.NOT_DONE);
+        List<Task> tasks = getAllTaskUpdatedStatus(todo, TaskStatus.NOT_DONE);
 
         return ResponseUtil.okBuild(tasks);
     }
