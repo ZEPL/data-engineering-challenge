@@ -121,6 +121,14 @@
             <version>[4.0,5.0)</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.hazelcast/hazelcast-all -->
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+            <version>3.7.4</version>
+        </dependency>
+
     </dependencies>
 
     <build>
