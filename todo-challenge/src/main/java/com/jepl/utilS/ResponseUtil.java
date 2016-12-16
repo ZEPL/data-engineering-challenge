@@ -3,11 +3,13 @@ package com.jepl.utils;
 import com.jepl.resources.*;
 
 import org.eclipse.jetty.http.*;
+import org.omg.CosNaming.NamingContextPackage.*;
 import org.slf4j.*;
 
 import java.io.*;
 import java.util.*;
 
+import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.*;
 
@@ -43,4 +45,11 @@ public class ResponseUtil {
     public static Response errorBuild(int status, Object obj) {
         return Response.status(status).entity(obj).build();
     }
+
+    public static void checkNull(Object o) {
+        if(Objects.isNull(o)) {
+            throw new NotFoundException();
+        }
+    }
+
 }
