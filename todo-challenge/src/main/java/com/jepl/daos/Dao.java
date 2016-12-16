@@ -43,22 +43,6 @@ public interface Dao {
 
     void deleteTask(String id, String id1);
 
-
-////    private Concurrent<String, Todo> todos;
-//    public static void main(String[] args) {
-//
-//        Config cfg = new Config();
-//        HazelcastInstance instance = Hazelcast.newHazelcastInstance(cfg);
-//        Map<Integer, String> mapCustomers = instance.getMap("customers");
-//        mapCustomers.put(1, "Joe");
-//        mapCustomers.put(2, "Ali");
-//        mapCustomers.put(3, "Avi");
-//
-//        instance.getList("")
-//
-//        mapCustomers.values().forEach(System.out::println);
-//
-//
-//    }
+    void init(Map<String, Todo> backupData);
 
 }
