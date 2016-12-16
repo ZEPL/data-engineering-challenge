@@ -40,17 +40,17 @@ public class Configuration {
 
             String dbServerUrl = prop.getProperty("dbserverurl");
             String dbServerPort = prop.getProperty("dbserverport");
-            String databaseName = prop.getProperty("databaseName");
+            String databaseName = prop.getProperty("database");
             String dbuser = prop.getProperty("dbuser");
             String dbpassword = prop.getProperty("dbpassword");
 
-            System.out.println(address);
-            System.out.println(port);
-            System.out.println(dbServerUrl);
-            System.out.println(dbServerPort);
-            System.out.println(databaseName);
-            System.out.println(dbuser);
-            System.out.println(dbpassword);
+//            System.out.println(address);
+//            System.out.println(port);
+//            System.out.println(dbServerUrl);
+//            System.out.println(dbServerPort);
+//            System.out.println(databaseName);
+//            System.out.println(dbuser);
+//            System.out.println(dbpassword);
 
             this.setServerAddress(address);
             this.setServerPort(port);

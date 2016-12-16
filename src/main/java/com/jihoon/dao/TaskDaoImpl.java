@@ -23,7 +23,7 @@ import java.util.List;
 
 public class TaskDaoImpl implements TaskDao {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(TaskDaoImpl.class);
 
     private Database database;
 
@@ -227,9 +227,12 @@ public class TaskDaoImpl implements TaskDao {
         Bson filter = new Document("_id", new ObjectId(taskId));
         DeleteResult deleteResult = collection.deleteOne(filter);
 
-        if(deleteResult.getDeletedCount() == 1)
+        if(deleteResult.getDeletedCount() == 1){
+            logger.debug("deleteTask : "+ taskId + " deleted");
             return true;
-        else
+        }else{
+            logger.error("deleteTask "+ taskId + " ERROR deleted item: "+ deleteResult.getDeletedCount());
             return false;
+        }
     }
 }

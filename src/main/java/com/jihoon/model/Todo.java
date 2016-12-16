@@ -1,7 +1,5 @@
 package com.jihoon.model;
 
-import java.util.List;
-
 public class Todo {
 
     private String id;

@@ -29,11 +29,11 @@ public class Database {
     }
 
     public void init(){
-        String mongoUrl = "mongodb://"+username+":"+password+"@"+dbServerUrl+":"+dbServerPort+"/"+databaseName;
+        String mongoUrl = "mongodb://"+getUsername()+":"+getPassword()+"@"+getDbServerUrl()+":"+getDbServerPort()+"/"+getDatabaseName();
         MongoClientURI uri = new MongoClientURI(mongoUrl);
         MongoClient mongoClient = new MongoClient(uri);
 
-        this.database = mongoClient.getDatabase(databaseName);
+        this.database = mongoClient.getDatabase(getDatabaseName());
         this.todoCollection = database.getCollection("todos");
         this.taskCollection = database.getCollection("tasks");
 
@@ -58,6 +58,22 @@ public class Database {
 
     public String getDatabaseName() {
         return databaseName;
+    }
+
+    public String getDbServerUrl() {
+        return dbServerUrl;
+    }
+
+    public void setDbServerUrl(String dbServerUrl) {
+        this.dbServerUrl = dbServerUrl;
+    }
+
+    public String getDbServerPort() {
+        return dbServerPort;
+    }
+
+    public void setDbServerPort(String dbServerPort) {
+        this.dbServerPort = dbServerPort;
     }
 
     public void setDatabaseName(String databaseName) {

@@ -20,7 +20,7 @@ import java.util.List;
 
 public class TodoDaoImpl implements TodoDao {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(TodoDaoImpl.class);
 
     private Database database;
 
@@ -91,9 +91,12 @@ public class TodoDaoImpl implements TodoDao {
         Bson filter = new Document("_id", new ObjectId(todoId));
         DeleteResult deleteResult = collection.deleteOne(filter);
 
-        if(deleteResult.getDeletedCount() == 1)
+        if(deleteResult.getDeletedCount() == 1){
+            logger.debug("deleteTodo : "+ todoId + " deleted");
             return true;
-        else
+        }else{
+            logger.error("deleteTodo "+ todoId + " ERROR deleted item: "+ deleteResult.getDeletedCount());
             return false;
+        }
     }
 }
