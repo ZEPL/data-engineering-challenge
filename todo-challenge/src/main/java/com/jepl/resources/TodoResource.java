@@ -62,9 +62,8 @@ public class TodoResource {
     @EventLogger
     public Response getTodoByTodoId(@PathParam("todo_id") String todo_id) {
         Todo todo = todos.get(todo_id);
-        if (Objects.isNull(todo)) {
-            return ResponseUtil.errorBuild(NOT_FOUND_404, new ErrorModel("Invalid todo id"));
-        }
+
+        ResponseUtil.checkNull(todo);
 
         return ResponseUtil.okBuild(todo);
     }
@@ -76,10 +75,9 @@ public class TodoResource {
     public Response getTodoByTodoIdAndTasksByTaskId(@PathParam("todo_id") String todo_id,
                                                     @PathParam("task_id") String task_id) {
         Todo todo = todos.get(todo_id);
-        if (Objects.isNull(todo)) {
-            logger.error("Invalid todo id");
-            return ResponseUtil.errorBuild(NOT_FOUND_404, new ErrorModel("Invalid todo id"));
-        }
+
+        ResponseUtil.checkNull(todo);
+
         Task task = todo.getTasks().get(task_id);
         if (Objects.isNull(task)) {
             logger.error("Invalid task id");
@@ -117,12 +115,9 @@ public class TodoResource {
     @EventLogger
     public Response setNotDoneToTask(@PathParam("todo_id") String todoId) {
         Todo todo = todos.get(todoId);
-        if (Objects.isNull(todo)) {
-            logger.error("Invalid todo id");
-            return ResponseUtil.errorBuild(NOT_FOUND_404, new ErrorModel("Invalid todo id"));
-        }
-        List<Task> tasks = getAllTaskUpdatedStatus(todo, TaskStatus.NOT_DONE);
+        ResponseUtil.checkNull(todo);
 
+        List<Task> tasks = getAllTaskUpdatedStatus(todo, TaskStatus.NOT_DONE);
         return ResponseUtil.okBuild(tasks);
     }
 
@@ -132,12 +127,9 @@ public class TodoResource {
     @Produces(MediaType.APPLICATION_JSON)
     @EventLogger
     public Response createTodo(Todo paramTodo) {
-        if (Objects.isNull(paramTodo)) {
-            logger.error("todo paramter is null");
-            return ResponseUtil.errorBuild(NOT_FOUND_404, new ErrorModel("todo parameter is null"));
-        }
-        Todo todo = new Todo(paramTodo.getName());
+        ResponseUtil.checkNull(paramTodo);
 
+        Todo todo = new Todo(paramTodo.getName());
         todo.setName(paramTodo.getName());
         todos.put(todo.getId(), todo);
         return ResponseUtil.okBuild(todo);
@@ -150,15 +142,11 @@ public class TodoResource {
     @EventLogger
     public Response createTask(@PathParam("todo_id") String todoId,
                                Task paramTask) {
-        if (Objects.isNull(paramTask)) {
-            logger.error("task paramter is null");
-            return ResponseUtil.errorBuild(NOT_FOUND_404, new ErrorModel("task parameter is null"));
-        }
+        ResponseUtil.checkNull(paramTask);
+
         Todo todo = todos.get(todoId);
-        if (Objects.isNull(todo)) {
-            logger.error("Invalid todo id");
-            return ResponseUtil.errorBuild(NOT_FOUND_404, new ErrorModel("Invalid todo id"));
-        }
+        ResponseUtil.checkNull(todo);
+
         Map<String, Task> tasks = todo.getTasks();
         Task task = new Task(paramTask.getName(), paramTask.getDescription());
         tasks.put(task.getId(), task);
@@ -175,16 +163,10 @@ public class TodoResource {
     public Response updateTask(@PathParam("todo_id") String todoId,
                                @PathParam("task_id") String taskId,
                                Task paramTask) {
-        if (Objects.isNull(paramTask)) {
-            logger.error("task parameter is null");
-            return ResponseUtil.errorBuild(NOT_FOUND_404, new ErrorModel("task parameter is null"));
-        }
+        ResponseUtil.checkNull(paramTask);
 
         Todo todo = todos.get(todoId);
-        if (Objects.isNull(todo)) {
-            logger.error("Invalid todo id");
-            return ResponseUtil.errorBuild(NOT_FOUND_404, new ErrorModel("Invalid todo id"));
-        }
+        ResponseUtil.checkNull(todo);
 
         Map<String, Task> tasks = todo.getTasks();
         Task task = tasks.get(taskId);
@@ -200,8 +182,7 @@ public class TodoResource {
     @EventLogger
     public Response deleteTodo(@PathParam("todo_id") String todoId) {
         if (!todos.containsKey(todoId)) {
-            logger.error("Invalid todo id");
-            return ResponseUtil.errorBuild(NOT_FOUND_404, new ErrorModel("Invalid todo id"));
+            throw new NotFoundException();
         }
         todos.remove(todoId);
         return ResponseUtil.okBuild(Collections.EMPTY_MAP);
@@ -214,8 +195,7 @@ public class TodoResource {
     public Response deleteTodo(@PathParam("todo_id") String todoId,
                                @PathParam("task_id") String taskId) {
         if (!todos.containsKey(todoId)) {
-            logger.error("Invalid todo id");
-            return ResponseUtil.errorBuild(NOT_FOUND_404, new ErrorModel("Invalid todo id"));
+            throw new NotFoundException();
         }
         Map<String, Task> tasks = todos.get(todoId).getTasks();
 

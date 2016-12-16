@@ -18,7 +18,6 @@ import static org.junit.Assert.assertNotNull;
 
 
 public class TodoResourceTest {
-//    private static final String PORT = "9999";
     private final Client client = ClientBuilder.newClient();
 
     @BeforeClass
@@ -39,19 +38,16 @@ public class TodoResourceTest {
     public void testTodoResourceTodos() {
         createTodo("");
         WebTarget target = createWebTarget("/todos");
-        List todos = target.request().get(new GenericType<List<Todo>>() {
-        });
+        List todos = target.request().get(new GenericType<List<Todo>>() {});
         assertEquals(true, todos.size() > 0);
     }
 
 
     @Test
     public void testTodoResourceTodoByTodoId_sendDummyIdThenExpectError() throws Exception {
-        WebTarget target = createWebTarget("/todos/84569ae0-bc41-11e6-a4a6-cec0c932ce03");
+        WebTarget target = createWebTarget("/todos/dummy");
         Response response = target.request().get();
         assertEquals(NOT_FOUND_404, response.getStatus());
-        ErrorModel errorModel = response.readEntity(ErrorModel.class);
-        assertEquals("Invalid todo id", errorModel.getMessage());
     }
 
 
@@ -60,8 +56,6 @@ public class TodoResourceTest {
         WebTarget target = createWebTarget("/todos/84569ae0-bc41-11e6-a4a6-cec0c932ce03/tasks/84569ae0-bc41-11e6-a4a6-cec0c932ce03");
         Response response = target.request().get();
         assertEquals(NOT_FOUND_404, response.getStatus());
-        ErrorModel errorModel = response.readEntity(ErrorModel.class);
-        assertEquals("Invalid todo id", errorModel.getMessage());
     }
 
     @Test
@@ -69,8 +63,6 @@ public class TodoResourceTest {
         WebTarget target = createWebTarget("/todos/84569ae0-bc41-11e6-a4a6-cec0c932ce03/tasks/done");
         Response response = target.request().get();
         assertEquals(NOT_FOUND_404, response.getStatus());
-        ErrorModel errorModel = response.readEntity(ErrorModel.class);
-        assertEquals("Invalid todo id", errorModel.getMessage());
     }
 
 
@@ -79,8 +71,6 @@ public class TodoResourceTest {
         WebTarget target = createWebTarget("/todos/84569ae0-bc41-11e6-a4a6-cec0c932ce03/tasks/not-done");
         Response response = target.request().get();
         assertEquals(NOT_FOUND_404, response.getStatus());
-        ErrorModel errorModel = response.readEntity(ErrorModel.class);
-        assertEquals("Invalid todo id", errorModel.getMessage());
     }
 
     private Todo createTodo(String name) {
@@ -159,5 +149,4 @@ public class TodoResourceTest {
         String result = target.request().delete(String.class);
         assertEquals("{}", result);
     }
-
 }
