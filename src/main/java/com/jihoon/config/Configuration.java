@@ -2,6 +2,8 @@ package com.jihoon.config;
 
 import com.google.inject.Singleton;
 import com.jihoon.app;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,11 +12,13 @@ import java.util.Properties;
 @Singleton
 public class Configuration {
 
+    private static final Logger logger = LoggerFactory.getLogger(app.class);
+
     private String serverAddress;
     private String serverPort;
     private String dbServerUrl;
     private String dbServerPort;
-    private String database;
+    private String databaseName;
     private String databaseUser;
     private String databasePassword;
 
@@ -28,7 +32,7 @@ public class Configuration {
             String filename = "application.conf";
             config = app.class.getClassLoader().getResourceAsStream(filename);
             if(config == null){
-                System.out.println("Sorry, unable to find " + filename);
+                logger.error("Sorry, unable to find " + filename);
                 return;
             }
             // load a properties file
@@ -40,27 +44,31 @@ public class Configuration {
 
             String dbServerUrl = prop.getProperty("dbserverurl");
             String dbServerPort = prop.getProperty("dbserverport");
-            String databaseName = prop.getProperty("database");
+            String databaseName = prop.getProperty("databaseName");
             String dbuser = prop.getProperty("dbuser");
             String dbpassword = prop.getProperty("dbpassword");
 
-//            System.out.println(address);
-//            System.out.println(port);
-//            System.out.println(dbServerUrl);
-//            System.out.println(dbServerPort);
-//            System.out.println(databaseName);
-//            System.out.println(dbuser);
-//            System.out.println(dbpassword);
+            logger.info("address : "+address);
+            logger.info("port : "+port);
+            logger.info("dbServerUrl : "+dbServerUrl);
+            logger.info("dbServerPort : "+dbServerPort);
+            logger.info("databaseName : "+databaseName);
+            logger.info("dbuser : "+dbuser);
+            logger.info("dbpassword : "+dbpassword);
 
             this.setServerAddress(address);
             this.setServerPort(port);
             this.setDbServerUrl(dbServerUrl);
             this.setDbServerPort(dbServerPort);
-            this.setDatabase(databaseName);
+            this.setDatabaseName(databaseName);
             this.setDatabaseUser(dbuser);
             this.setDatabasePassword(dbpassword);
 
         } catch (IOException ex) {
+            logger.error("IOException : "+ ex.getMessage());
+            ex.printStackTrace();
+        } catch (Exception ex) {
+            logger.error("Exception : " + ex.getMessage());
             ex.printStackTrace();
         }
     }
@@ -81,8 +89,8 @@ public class Configuration {
         this.serverPort = serverPort;
     }
 
-    public String getDatabase() {
-        return database;
+    public String getDatabaseName() {
+        return databaseName;
     }
 
     public String getDbServerUrl() {
@@ -101,8 +109,8 @@ public class Configuration {
         this.dbServerPort = dbServerPort;
     }
 
-    public void setDatabase(String database) {
-        this.database = database;
+    public void setDatabaseName(String databaseName) {
+        this.databaseName = databaseName;
     }
 
     public String getDatabaseUser() {

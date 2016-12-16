@@ -23,9 +23,10 @@ public class app {
         logger.info("Server init");
         Injector injector = Guice.createInjector( Stage.PRODUCTION, new ConfigModule());
 
+        logger.info("Server port1 : ");
         Configuration config = injector.getInstance(Configuration.class);
 
-        logger.info("Server port : " + config.getServerPort());
+        logger.info("Server port2 : " + config.getServerPort());
         Server server = new Server(Integer.parseInt(config.getServerPort()));
 
         ServletContextHandler context = new ServletContextHandler(server, "/", ServletContextHandler.SESSIONS);

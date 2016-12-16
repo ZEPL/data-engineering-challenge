@@ -1,12 +1,17 @@
 package com.jihoon.config;
 
 import com.google.inject.Inject;
+import com.jihoon.app;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Database {
+
+    private static final Logger logger = LoggerFactory.getLogger(app.class);
 
     private String dbServerUrl;
     private String dbServerPort;
@@ -23,13 +28,15 @@ public class Database {
         this.dbServerPort = config.getDbServerPort();
         this.username = config.getDatabaseUser();
         this.password = config.getDatabasePassword();
-        this.databaseName = config.getDatabase();
+        this.databaseName = config.getDatabaseName();
 
         init();
     }
 
     public void init(){
+        logger.info("Database init start");
         String mongoUrl = "mongodb://"+getUsername()+":"+getPassword()+"@"+getDbServerUrl()+":"+getDbServerPort()+"/"+getDatabaseName();
+        logger.info("mongoUrl : "+ mongoUrl);
         MongoClientURI uri = new MongoClientURI(mongoUrl);
         MongoClient mongoClient = new MongoClient(uri);
 
@@ -37,7 +44,7 @@ public class Database {
         this.todoCollection = database.getCollection("todos");
         this.taskCollection = database.getCollection("tasks");
 
-        System.out.println("mongoDB init completed");
+        logger.info("mongoDB init completed");
     }
 
     public String getUsername() {
