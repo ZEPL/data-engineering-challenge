@@ -9,6 +9,9 @@ import java.io.*;
 import java.util.*;
 
 import javax.ws.rs.core.*;
+import javax.ws.rs.core.Response.*;
+
+import static javax.ws.rs.core.Response.Status.OK;
 
 public class ResponseUtil {
     static final Logger logger = LoggerFactory.getLogger(ResponseUtil.class);
@@ -34,10 +37,10 @@ public class ResponseUtil {
 
         }
 
-        return Response.status(HttpStatus.OK_200).entity(obj).build();
+        return Response.status(OK).entity(obj).build();
     }
 
-    public static Response errorBuild(Object obj) {
-        return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).entity(obj).build();
+    public static Response errorBuild(int status, Object obj) {
+        return Response.status(status).entity(obj).build();
     }
 }

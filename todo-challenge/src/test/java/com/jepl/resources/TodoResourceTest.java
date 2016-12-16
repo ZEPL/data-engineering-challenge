@@ -10,7 +10,9 @@ import java.util.*;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.*;
 
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static org.eclipse.jetty.http.HttpStatus.INTERNAL_SERVER_ERROR_500;
+import static org.eclipse.jetty.http.HttpStatus.NOT_FOUND_404;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -47,7 +49,7 @@ public class TodoResourceTest {
     public void testTodoResourceTodoByTodoId_sendDummyIdThenExpectError() throws Exception {
         WebTarget target = createWebTarget("/todos/84569ae0-bc41-11e6-a4a6-cec0c932ce03");
         Response response = target.request().get();
-        assertEquals(INTERNAL_SERVER_ERROR_500, response.getStatus());
+        assertEquals(NOT_FOUND_404, response.getStatus());
         ErrorModel errorModel = response.readEntity(ErrorModel.class);
         assertEquals("Invalid todo id", errorModel.getMessage());
     }
@@ -57,7 +59,7 @@ public class TodoResourceTest {
     public void testTodoResourceGetTodoByTodoIdAndTasksByTaskId_sendDummyIdThenExpectError() throws Exception {
         WebTarget target = createWebTarget("/todos/84569ae0-bc41-11e6-a4a6-cec0c932ce03/tasks/84569ae0-bc41-11e6-a4a6-cec0c932ce03");
         Response response = target.request().get();
-        assertEquals(INTERNAL_SERVER_ERROR_500, response.getStatus());
+        assertEquals(NOT_FOUND_404, response.getStatus());
         ErrorModel errorModel = response.readEntity(ErrorModel.class);
         assertEquals("Invalid todo id", errorModel.getMessage());
     }
@@ -66,7 +68,7 @@ public class TodoResourceTest {
     public void testTodoResourceSetDoneToTask_sendDummtyIdThenExpectError() throws Exception {
         WebTarget target = createWebTarget("/todos/84569ae0-bc41-11e6-a4a6-cec0c932ce03/tasks/done");
         Response response = target.request().get();
-        assertEquals(INTERNAL_SERVER_ERROR_500, response.getStatus());
+        assertEquals(NOT_FOUND_404, response.getStatus());
         ErrorModel errorModel = response.readEntity(ErrorModel.class);
         assertEquals("Invalid todo id", errorModel.getMessage());
     }
@@ -76,7 +78,7 @@ public class TodoResourceTest {
     public void testTodoResourceSetNotDoneToTask_sendDummtyIdThenExpectError() throws Exception {
         WebTarget target = createWebTarget("/todos/84569ae0-bc41-11e6-a4a6-cec0c932ce03/tasks/not-done");
         Response response = target.request().get();
-        assertEquals(INTERNAL_SERVER_ERROR_500, response.getStatus());
+        assertEquals(NOT_FOUND_404, response.getStatus());
         ErrorModel errorModel = response.readEntity(ErrorModel.class);
         assertEquals("Invalid todo id", errorModel.getMessage());
     }
