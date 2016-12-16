@@ -27,7 +27,6 @@ public class TodoResource {
     public static LinkedHashMap<String, Todo> todos;
 
     static {
-        FileInputStream fileIn;
         try {
             if(new File("/tmp/todos.json").exists()) {
                 String jsonString = FileUtil.readString("/tmp/todos.json");
