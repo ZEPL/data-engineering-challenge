@@ -20,7 +20,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
+/**
+ * TaskDao class : implements TaskDao
+ *
+ * This Dao handle mongoDB database and Tasks Collection data
+ */
 public class TaskDaoImpl implements TaskDao {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskDaoImpl.class);

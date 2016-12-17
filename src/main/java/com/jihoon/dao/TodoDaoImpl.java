@@ -18,6 +18,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * TodoDao class : implements TodoDao
+ *
+ * This Dao handle mongoDB database and Todos Collection data
+ */
 public class TodoDaoImpl implements TodoDao {
 
     private static final Logger logger = LoggerFactory.getLogger(TodoDaoImpl.class);

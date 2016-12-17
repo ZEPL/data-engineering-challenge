@@ -1,5 +1,8 @@
 package com.jihoon.model;
 
+/**
+ * Task Model
+ */
 public class Task {
 
     private String id;

@@ -15,8 +15,16 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import java.util.HashMap;
 
+/**
+ * ConfigModule : DI(dependancy Injection) configuration
+ */
 public class ConfigModule extends ServletModule {
 
+    /**
+     * Two main configurations
+     * 1. Singleton config
+     * 2. binding config
+     */
     @Override
     protected void configureServlets() {
         bind(DefaultServlet.class).in(Singleton.class);

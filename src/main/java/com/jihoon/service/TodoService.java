@@ -2,6 +2,9 @@ package com.jihoon.service;
 
 import javax.ws.rs.core.Response;
 
+/**
+ * TodoService interface
+ */
 public interface TodoService {
     Response getTodos();
     Response createTodo(String name);

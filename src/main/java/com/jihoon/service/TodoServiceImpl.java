@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+/**
+ * TodoServiceImpl implements TodoService
+ */
 public class TodoServiceImpl implements TodoService {
 
     private static final Logger logger = LoggerFactory.getLogger(app.class);

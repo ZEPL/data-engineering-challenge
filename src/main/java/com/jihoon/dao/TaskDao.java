@@ -4,6 +4,9 @@ import com.jihoon.model.Task;
 
 import java.util.List;
 
+/**
+ * define TaskDao interface
+ */
 public interface TaskDao {
     List<Task> getTasks(String todoId);
     Task createTask(String todoId, String name, String description);

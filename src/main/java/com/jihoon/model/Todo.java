@@ -1,5 +1,8 @@
 package com.jihoon.model;
 
+/**
+ * Todo Model
+ */
 public class Todo {
 
     private String id;

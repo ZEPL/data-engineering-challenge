@@ -9,6 +9,9 @@ import com.mongodb.client.MongoDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Database class : set and initialize database environment
+ */
 public class Database {
 
     private static final Logger logger = LoggerFactory.getLogger(app.class);
@@ -33,6 +36,9 @@ public class Database {
         init();
     }
 
+    /**
+     * initialize Database : MonogDB init
+     */
     public void init(){
         logger.info("Database init start");
         String mongoUrl = "mongodb://"+getUsername()+":"+getPassword()+"@"+getDbServerUrl()+":"+getDbServerPort()+"/"+getDatabaseName();

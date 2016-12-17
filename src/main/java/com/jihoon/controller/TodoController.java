@@ -10,6 +10,11 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * TodoController : todo-service's routes and endpoint.
+ * 1.Define the path and restful api conditions.
+ * 2.Each method calls service layers class method.
+ */
 @Path("/Todos")
 @Singleton
 public class TodoController {

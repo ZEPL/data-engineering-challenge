@@ -14,6 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.EnumSet;
 
+/**
+ * RESTFul service app
+ */
 public class app {
 
     private static final Logger logger = LoggerFactory.getLogger(app.class);
