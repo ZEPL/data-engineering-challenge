@@ -1,13 +1,37 @@
 package com.jihoon;
 
+import com.jihoon.dao.TodoDaoImplTest;
 import com.jihoon.model.Task;
 import com.jihoon.model.Todo;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class testBase {
 
+    private final static Logger logger = LoggerFactory.getLogger(testBase.class);
+
+    // Test Mongo DB server config
+    private String dbServerUrl;
+    private String dbServerPort;
+    private String username;
+    private String password;
+    private String databaseName;
+
+    private MongoDatabase database;
+    private MongoCollection todoCollection;
+    private MongoCollection taskCollection;
+
+    // Mock test Data
     public Todo todo1;
     public Todo todo2;
     public List<Todo> mockTodoList;
@@ -55,5 +79,79 @@ public class testBase {
         mockTaskNotDoneList = new ArrayList();
         mockTaskList.add(task2);
         mockTaskList.add(task4);
+    }
+
+
+    public void testMongoDBserverInit(){
+
+        logger.info("TEST Database config");
+
+        Properties prop = new Properties();
+        InputStream config = null;
+
+        try {
+
+            String filename = "application.conf";
+            config = testBase.class.getClassLoader().getResourceAsStream(filename);
+            if(config == null){
+                logger.error("Sorry, unable to find " + filename);
+                return;
+            }
+            // load a properties file
+            prop.load(config);
+
+            // get the property value and print it out
+            String address = prop.getProperty("address");
+            String port = prop.getProperty("port");
+
+            String dbServerUrl = prop.getProperty("dbserverurl");
+            String dbServerPort = prop.getProperty("dbserverport");
+            String databaseName = prop.getProperty("databaseName");
+            String dbuser = prop.getProperty("dbuser");
+            String dbpassword = prop.getProperty("dbpassword");
+
+            logger.info("dbServerUrl : "+dbServerUrl);
+            logger.info("dbServerPort : "+dbServerPort);
+            logger.info("databaseName : "+databaseName);
+            logger.info("dbuser : "+dbuser);
+            logger.info("dbpassword : "+dbpassword);
+
+            this.dbServerUrl = dbServerUrl;
+            this.dbServerPort = dbServerPort;
+            this.databaseName = databaseName;
+            this.username = dbuser;
+            this.password = dbpassword;
+
+        } catch (IOException ex) {
+            logger.error("IOException : "+ ex.getMessage());
+            ex.printStackTrace();
+        } catch (Exception ex) {
+            logger.error("Exception : " + ex.getMessage());
+            ex.printStackTrace();
+        }
+
+        logger.info("Database init start");
+        String mongoUrl = "mongodb://"+username+":"+password+"@"+dbServerUrl+":"+dbServerPort+"/"+databaseName;
+        logger.info("mongoUrl : "+ mongoUrl);
+        MongoClientURI uri = new MongoClientURI(mongoUrl);
+        MongoClient mongoClient = new MongoClient(uri);
+
+        this.database = mongoClient.getDatabase(databaseName);
+        this.todoCollection = database.getCollection("todos");
+        this.taskCollection = database.getCollection("tasks");
+
+        logger.info("TEST mongoDB init completed");
+    }
+
+    public MongoDatabase getDatabase() {
+        return database;
+    }
+
+    public MongoCollection getTodoCollection() {
+        return todoCollection;
+    }
+
+    public MongoCollection getTaskCollection() {
+        return taskCollection;
     }
 }
