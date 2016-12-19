@@ -1,21 +1,38 @@
 package com.jepl.daos;
 
 import com.google.inject.*;
-import com.google.inject.Inject;
 import com.google.inject.name.*;
 
+import com.hazelcast.config.*;
+import com.hazelcast.core.*;
 import com.jepl.enums.*;
 import com.jepl.models.*;
+
 import java.util.*;
 import java.util.stream.*;
 
-public class SimpleDao implements Dao {
-    Map<String, Todo> todoMap;
+public class HazelcastDao implements Dao {
+    private HazelcastInstance instance;
+    private Map<String, Todo> todoMap;
 
     @Inject
-    public SimpleDao(@Named("backupTodos") List<Todo> todos) {
-        todoMap = todos.stream().collect(Collectors.toMap(Todo::getId, x -> x));
+    public HazelcastDao( @Named("backupTodos")  List<Todo> todos) {
+        Config cfg = new Config();
+        instance = Hazelcast.newHazelcastInstance(cfg);
+        Map<String, Todo> todoMap = instance.getMap("todoMap");
+        if(todos.size() > 0 ) {
+            for (Todo todo : todos) {
+                todoMap.put(todo.getId(), todo);
+            }
+        }
+
+        this.todoMap = todoMap;
     }
+
+    public void destory() {
+        instance.shutdown();
+    }
+
 
     @Override
     public List<Todo> getAllTodo() {
@@ -88,5 +105,9 @@ public class SimpleDao implements Dao {
         Todo todo = getTodoById(todoId);
         todo.getTasks().remove(taskId);
         todoMap.put(todo.getId(), todo);
+    }
+
+    public void deleteAllTask() {
+        todoMap.clear();
     }
 }

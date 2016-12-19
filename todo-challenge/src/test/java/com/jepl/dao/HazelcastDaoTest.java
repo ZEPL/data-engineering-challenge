@@ -10,15 +10,24 @@ import java.util.*;
 
 import javax.ws.rs.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-public class SimpleDaoTest {
-    Dao dao;
+public class HazelcastDaoTest {
+    private static Dao dao;
+
+    @BeforeClass
+    public static void initTest(){
+        dao = new HazelcastDao(new ArrayList<>());
+    }
+
+    @AfterClass
+    public static void afterTest() {
+        ((HazelcastDao)dao).destory();
+    }
 
     @Before
-    public void initTest(){
-        this.dao = new SimpleDao(new ArrayList<>());
+    public void initBefore() {
+        ((HazelcastDao)dao).deleteAllTask();
     }
 
     @Test
@@ -75,6 +84,7 @@ public class SimpleDaoTest {
         Task task = dao.createTask(todo.getId(), "name", "description");
         task.setName("update name");
         task.setDescription("update description");
+
         dao.updateTask(todo.getId(), task);
         Task resultTask = dao.getTaskByTodoIdAndTaskId(todo.getId(), task.getId());
         assertEquals("update name", resultTask.getName());
@@ -93,8 +103,9 @@ public class SimpleDaoTest {
     public void testDeleteTask() {
         Todo todo = dao.createTodo("todo name");
         Task task = dao.createTask(todo.getId(), "name", "description");
+        Todo resultTodo = dao.getTodoById(todo.getId());
 
-        assertEquals(1, todo.getTasks().size());
+        assertEquals(1, resultTodo.getTasks().size());
         dao.deleteTask(todo.getId(), task.getId());
         assertEquals(0, todo.getTasks().size());
 

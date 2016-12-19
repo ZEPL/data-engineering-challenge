@@ -53,7 +53,7 @@ public class TodoResourceTest {
 
     @Test
     public void testTodoResourceGetTodoByTodoIdAndTasksByTaskId_sendDummyIdThenExpectError() throws Exception {
-        WebTarget target = createWebTarget("/todos/84569ae0-bc41-11e6-a4a6-cec0c932ce03/tasks/84569ae0-bc41-11e6-a4a6-cec0c932ce03");
+        WebTarget target = createWebTarget("/todos/dummy/tasks/dummy");
         Response response = target.request().get();
         assertEquals(NOT_FOUND_404, response.getStatus());
     }

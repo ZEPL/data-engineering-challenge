@@ -1,13 +1,10 @@
 package com.jepl.daos;
 
-import com.hazelcast.config.*;
-import com.hazelcast.core.*;
 import com.jepl.enums.*;
 import com.jepl.models.*;
 
 import java.util.*;
 import java.util.stream.*;
-
 import javax.ws.rs.*;
 
 public interface Dao {
@@ -39,10 +36,7 @@ public interface Dao {
 
     void updateTask(String todoId, Task task);
 
-    void deleteTodo(String id);
+    void deleteTodo(String todoId);
 
-    void deleteTask(String id, String id1);
-
-    void init(Map<String, Todo> backupData);
-
+    void deleteTask(String todoId, String taskId);
 }
