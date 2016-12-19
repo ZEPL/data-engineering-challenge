@@ -31,7 +31,7 @@ public class TodoDaoImpl implements TodoDao {
 
 
     @Inject
-    public void TodoDao(Database database){
+    public TodoDaoImpl(Database database){
         this.database = database;
     }
 

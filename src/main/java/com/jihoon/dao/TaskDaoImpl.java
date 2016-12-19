@@ -33,7 +33,7 @@ public class TaskDaoImpl implements TaskDao {
 
 
     @Inject
-    public void TaskDao(Database database){
+    public TaskDaoImpl(Database database){
         this.database = database;
     }
 
