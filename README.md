@@ -3,7 +3,7 @@ Challenge for Software Engineer
 
 To better assess a candidates development skills, we would like to provide the following challenge. You have as much time as you'd like (though we ask that you not spend more than a few hours).
 
-Feel free to email us at moon@nflabs.com if you have any questions about the challenge.
+Feel free to email us at anthony@zepl.com if you have any questions about the challenge.
 
 ## Submission Instructions
  1. First, fork this project on github. You will need to create an account if you don't already have one.
