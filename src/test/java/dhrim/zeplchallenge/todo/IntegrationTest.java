@@ -9,13 +9,19 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class TodoRestApiTest extends AbstractTestBase {
+/**
+ * Test only all integrated are working.
+ *
+ *      RestApi - Service - Repo
+ *
+ * Detail functions are tested in other testcase.
+ *
+ */
+public class IntegrationTest extends AbstractTestBase {
+
 
     @Before
     public void before() throws Exception {
@@ -31,27 +37,9 @@ public class TodoRestApiTest extends AbstractTestBase {
     protected Module getMockBinding() {
         return new AbstractModule() {
             @Override
-            protected void configure() {
-                bind(TodoRepo.class).toInstance(new MockMemoryTodoRepo());
-            }
+            protected void configure() { }
         };
     }
-
-    private static class MockMemoryTodoRepo extends AbstractMapBasedTodoRepo {
-
-        @Override
-        protected Map<String, Todo> getTodoMapInstance() {
-            return new HashMap<String, Todo>();
-        }
-
-        @Override
-        protected Map<String, Map<String, Task>> getTasksMapInstance() {
-            return new HashMap<String, Map<String, Task>>();
-        }
-
-
-    }
-
 
     @Test
     public void test_createTodo() throws Exception {
@@ -89,6 +77,7 @@ public class TodoRestApiTest extends AbstractTestBase {
 
 
     }
+
 
 
 }
