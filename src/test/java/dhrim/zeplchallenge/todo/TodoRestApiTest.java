@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,10 +58,10 @@ public class TodoRestApiTest extends AbstractTestBase {
     public void test_createTodo() throws Exception {
 
         // GIVEN
+        Todo todo = new TodoBuilder().name("name1").build();
 
         // WHEN
-        Todo todo = new TodoBuilder().name("name1").build();
-        String responseBodyString = sendAndGetResponseBody(BASE_URL+"/todos", todo);
+        String responseBodyString = sendAndGetResponseBody(BASE_URL+"/todos", todo, HttpStatus.OK_200);
 
         // THEN
         // {"id":"1e0840ec-6cbf-41d4-8c83-83fb6f8bf8f7","name":"name1","created":1482992669764}
@@ -72,6 +73,23 @@ public class TodoRestApiTest extends AbstractTestBase {
         assertNotNull(actualTodo.getCreated());
 
     }
+
+
+    @Test
+    public void test_createTodo_failed_when_empty_input() throws IOException {
+
+        // GIVEN
+        Object emptyString = "";
+
+        // WHEN
+        String responseBodyString = sendAndGetResponseBody(BASE_URL+"/todos", emptyString, HttpStatus.BAD_REQUEST_400);
+
+        // THEN
+        FailedMessage failedMessage =objectMapper.readValue(responseBodyString, FailedMessage.class);
+        assertNotNull(failedMessage.getMessage());
+
+    }
+
 
     @Test
     public void test_getTodos() throws Exception {

@@ -43,12 +43,14 @@ public abstract class AbstractMapBasedTodoRepo implements TodoRepo {
     @Override
     public Todo getTodo(String todoId) {
         initIfNot();
+        if(todoId==null) { throw new IllegalArgumentException("todoId is null"); }
         return todoMap.get(todoId);
     }
 
     @Override
     public Todo saveOrUpdate(Todo todo) {
         initIfNot();
+        if(todo.getId()==null) { throw new IllegalArgumentException("todo.id is null. todo="+todo); }
         todoMap.put(todo.getId(), todo);
         return getTodo(todo.getId());
     }
@@ -57,12 +59,15 @@ public abstract class AbstractMapBasedTodoRepo implements TodoRepo {
     @Override
     public List<Task> getTaskList(String todoId) {
         initIfNot();
+        if(todoId==null) { throw new IllegalArgumentException("todoId is null"); }
         return new ArrayList(tasksMap.get(todoId).values());
     }
 
     @Override
     public Task getTask(String todoId, String taskId) {
         initIfNot();
+        if(todoId==null) { throw new IllegalArgumentException("todoId is null"); }
+        if(taskId==null) { throw new IllegalArgumentException("taskId is null"); }
         Map<String, Task> aTaskMap = tasksMap.get(todoId);
         return aTaskMap.get(taskId);
     }
@@ -70,6 +75,8 @@ public abstract class AbstractMapBasedTodoRepo implements TodoRepo {
     @Override
     public Task saveOrUpdate(String todoId, Task task) {
         initIfNot();
+        if(todoId==null) { throw new IllegalArgumentException("todoId is null"); }
+        if(task.getId()==null) { throw new IllegalArgumentException("task.id is null. task="+task); }
         Map<String, Task> aTaskMap = tasksMap.get(todoId);
         if(aTaskMap==null) { return null; }
         aTaskMap.put(task.getId(), task);

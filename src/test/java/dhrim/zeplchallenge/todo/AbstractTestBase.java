@@ -7,7 +7,6 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.eclipse.jetty.http.HttpHeader;
-import org.eclipse.jetty.http.HttpStatus;
 
 import java.io.IOException;
 
@@ -53,7 +52,7 @@ public abstract class AbstractTestBase {
 
 
 
-    protected String sendAndGetResponseBody(String url, Object requestBodyObject) throws IOException {
+    protected String sendAndGetResponseBody(String url, Object requestBodyObject, int expectedStatusCode) throws IOException {
 
         HttpClient httpClient = new HttpClient();
         PostMethod method = new PostMethod(url);
@@ -62,7 +61,7 @@ public abstract class AbstractTestBase {
         method.setRequestEntity(stringRequestEntity);
         httpClient.executeMethod(method);
 
-        assertEquals(HttpStatus.OK_200, method.getStatusCode());
+        assertEquals(expectedStatusCode, method.getStatusCode());
 
         return method.getResponseBodyAsString();
 

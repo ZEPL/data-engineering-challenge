@@ -60,7 +60,9 @@ public class TodoRestApi {
     @Consumes("application/json")
     @Produces("application/json")
     public Response createTodo(Todo todo) throws IOException {
+        System.out.println("ASDF : todo="+todo);
         Todo newTodo = todoService.createTodo(todo);
+        System.out.println("ASDF : newTodo="+newTodo);
         return new ResponseBuilder(Response.Status.OK, newTodo).build();
     }
 

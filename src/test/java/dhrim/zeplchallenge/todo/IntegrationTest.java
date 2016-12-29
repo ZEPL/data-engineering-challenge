@@ -48,7 +48,7 @@ public class IntegrationTest extends AbstractTestBase {
 
         // WHEN
         Todo todo = new TodoBuilder().name("name1").build();
-        String responseBodyString = sendAndGetResponseBody(BASE_URL+"/todos", todo);
+        String responseBodyString = sendAndGetResponseBody(BASE_URL+"/todos", todo, HttpStatus.OK_200);
 
         // THEN
         // {"id":"1e0840ec-6cbf-41d4-8c83-83fb6f8bf8f7","name":"name1","created":1482992669764}

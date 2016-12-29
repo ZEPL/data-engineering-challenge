@@ -42,9 +42,11 @@ public class TodoService {
      *
      * @param todo
      * @return created new instance
+     * @throws throw IllegalArgumentException when todo is null or todo.name is null
      */
     public Todo createTodo(Todo todo) {
-        if(todo==null) { throw new IllegalArgumentException("todo instance is null."); }
+        if(todo==null) { throw new IllegalArgumentException("todo is null."); }
+        if(todo.getName()==null) { throw new IllegalArgumentException("todo.name is null. todo="+todo); }
         todo.setId(UUID.randomUUID().toString());
         todo.setCreated(new Date());
         return todoRepo.saveOrUpdate(todo);
