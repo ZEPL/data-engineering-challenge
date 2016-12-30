@@ -5,6 +5,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 public class ResponseBuilder {
 
@@ -16,6 +17,7 @@ public class ResponseBuilder {
     private static ObjectMapper objectMapper = new ObjectMapper();
     static {
         objectMapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
+        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS"));
     }
 
     public ResponseBuilder(javax.ws.rs.core.Response.Status status) {

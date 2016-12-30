@@ -8,7 +8,6 @@ import com.google.inject.servlet.GuiceFilter;
 import com.google.inject.util.Modules;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
 
@@ -32,7 +31,6 @@ public class TodoServer {
         ServletContextHandler servletContextHandler = new ServletContextHandler(server, "/");
         // GuiceFilter is added. to inject instance when http requested
         servletContextHandler.addFilter(GuiceFilter.class, "/*", null);
-        servletContextHandler.addServlet(DefaultServlet.class, "/");
 
         try {
             server.start();

@@ -30,6 +30,8 @@ public abstract class AbstractMapBasedTodoRepo implements TodoRepo {
 
     @VisibleForTesting
     void clear_for_test() {
+        // could be null if initIfNot() not called.
+        if(todoMap==null) { return; }
         todoMap.clear();
         tasksMap.clear();
     }

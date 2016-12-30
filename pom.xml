@@ -15,14 +15,21 @@
 
         <!-- library version -->
         <jackson.version>1.9.11</jackson.version>
+        <jetty-server.version>9.2.3.v20140905</jetty-server.version>
         <jersy.version>2.25</jersy.version>
+        <jersey-json.version>1.19.3</jersey-json.version>
+        <jersey-guice>1.19.3</jersey-guice>
+        <guice.version>3.0</guice.version>
         <slf4j.version>1.7.22</slf4j.version>
         <logback.version>1.1.8</logback.version>
         <lombok.version>1.16.12</lombok.version>
+        <mapdb.version>3.0.2</mapdb.version>
+        <guava.version>20.0</guava.version>
 
         <!-- test library version -->
         <junit.version>4.12</junit.version>
         <httpclient.version>3.1</httpclient.version>
+        <hamcrest-junit.version>2.0.0.0</hamcrest-junit.version>
 
     </properties>
 
@@ -55,56 +62,48 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>9.2.3.v20140905</version>
+            <version>${jetty-server.version}</version>
         </dependency>
 
 
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
-            <version>9.2.3.v20140905</version>
+            <version>${jetty-server.version}</version>
         </dependency>
 
 
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-server</artifactId>
-            <version>2.7</version>
+            <version>${jersy.version}</version>
         </dependency>
 
 
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet-core</artifactId>
-            <version>2.7</version>
+            <version>${jersy.version}</version>
         </dependency>
 
 
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-jetty-http</artifactId>
-            <version>2.7</version>
+            <version>${jersy.version}</version>
         </dependency>
 
 
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-json</artifactId>
-            <version>1.19.3</version>
+            <version>${jersey-json.version}</version>
         </dependency>
-
-
-        <!--<dependency>-->
-            <!--<groupId>org.eclipse.jetty</groupId>-->
-            <!--<artifactId>jetty-server</artifactId>-->
-            <!--<version>9.4.0.v20161208</version>-->
-        <!--</dependency>-->
-
 
         <dependency>
             <groupId>com.sun.jersey.contribs</groupId>
             <artifactId>jersey-guice</artifactId>
-            <version>1.19.3</version>
+            <version>${jersey-json.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>javax.ws.rs</groupId>
@@ -112,43 +111,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-
-        <!--<dependency>-->
-            <!--<groupId>org.eclipse.jetty</groupId>-->
-            <!--<artifactId>jetty-servlet</artifactId>-->
-            <!--<version>9.4.0.v20161208</version>-->
-        <!--</dependency>-->
-
-
-        <!--<dependency>-->
-            <!--<groupId>org.glassfish.jersey.core</groupId>-->
-            <!--<artifactId>jersey-server</artifactId>-->
-            <!--<version>${jersy.version}</version>-->
-        <!--</dependency>-->
-
-
-
-        <!--<dependency>-->
-            <!--<groupId>org.glassfish.jersey.containers</groupId>-->
-            <!--<artifactId>jersey-container-servlet</artifactId>-->
-            <!--<version>${jersy.version}</version>-->
-        <!--</dependency>-->
-
-
-        <!--<dependency>-->
-            <!--<groupId>org.glassfish.jersey.test-framework</groupId>-->
-            <!--<artifactId>jersey-test-framework-core</artifactId>-->
-            <!--<version>${jersy.version}</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.glassfish.jersey.test-framework.providers</groupId>-->
-            <!--<artifactId>jersey-test-framework-provider-jetty</artifactId>-->
-            <!--<version>${jersy.version}</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
 
 
         <dependency>
@@ -161,14 +123,14 @@
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
-            <version>3.0</version>
+            <version>${guice.version}</version>
         </dependency>
 
         <!-- common util -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>20.0</version>
+            <version>${guava.version}</version>
         </dependency>
 
 
@@ -177,7 +139,7 @@
         <dependency>
             <groupId>org.mapdb</groupId>
             <artifactId>mapdb</artifactId>
-            <version>3.0.2</version>
+            <version>${mapdb.version}</version>
         </dependency>
 
 
@@ -217,6 +179,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-junit</artifactId>
+            <version>${hamcrest-junit.version}</version>
+            <scope>test</scope>
+        </dependency>
 
 
     </dependencies>
