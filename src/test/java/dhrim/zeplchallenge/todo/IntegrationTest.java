@@ -51,7 +51,6 @@ public class IntegrationTest extends AbstractTestBase {
         String responseBodyString = sendAndGetResponseBody(POST, "/todos", todo, HttpStatus.OK_200);
 
         // THEN
-        // {"id":"1e0840ec-6cbf-41d4-8c83-83fb6f8bf8f7","name":"name1","created":1482992669764}
         assertNotNull(responseBodyString);
         Todo actualTodo = objectMapper.readValue(responseBodyString, Todo.class);
 
@@ -62,7 +61,7 @@ public class IntegrationTest extends AbstractTestBase {
     }
 
     @Test
-    public void test_getTodos() throws Exception {
+    public void test_getTodoList() throws Exception {
 
         // GIVEN
 

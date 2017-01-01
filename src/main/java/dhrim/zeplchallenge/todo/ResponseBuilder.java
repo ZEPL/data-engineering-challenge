@@ -7,6 +7,9 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
+/**
+ * Build http rest response.
+ */
 public class ResponseBuilder {
 
     private javax.ws.rs.core.Response.Status status;
@@ -15,9 +18,10 @@ public class ResponseBuilder {
     // set as static so as to always use same instance to reuse parsing result.
     // ObjectMapper is thread safe by itself.
     private static ObjectMapper objectMapper = new ObjectMapper();
+
     static {
         objectMapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
-        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS"));
+        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"));
     }
 
     public ResponseBuilder(javax.ws.rs.core.Response.Status status) {
@@ -32,7 +36,10 @@ public class ResponseBuilder {
 
 
     public javax.ws.rs.core.Response build() throws IOException {
-        String json = objectMapper.writeValueAsString(body);
+        String json = "{}";
+        if(body!=null) {
+            json = objectMapper.writeValueAsString(body);
+        }
         Response.ResponseBuilder r = Response.status(status).entity(json);
         return r.build();
     }

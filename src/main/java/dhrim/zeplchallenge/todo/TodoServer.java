@@ -11,7 +11,6 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
 
-// TODO : treat exception
 @Slf4j
 public class TodoServer {
 
@@ -74,7 +73,6 @@ public class TodoServer {
         return getInstanceWithMockBinding();
     }
 
-
     private static Injector injector;
 
     @VisibleForTesting
@@ -82,11 +80,6 @@ public class TodoServer {
         Module module = Modules.override(GUICE_DI_MODULES).with(additionalModules);
         injector = Guice.createInjector(module);
         return injector.getInstance(TodoServer.class);
-    }
-
-    @VisibleForTesting
-    static Object getDiInstance(Class<?> clazz) {
-        return injector.getInstance(clazz);
     }
 
 }

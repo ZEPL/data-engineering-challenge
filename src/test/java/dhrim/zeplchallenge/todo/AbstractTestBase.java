@@ -10,8 +10,11 @@ import org.eclipse.jetty.http.HttpHeader;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public abstract class AbstractTestBase {
 
@@ -40,7 +43,7 @@ public abstract class AbstractTestBase {
         if(objectMapper!=null) { return; }
         objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
-        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS"));
+        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"));
     }
 
     protected void after() {
@@ -86,9 +89,10 @@ public abstract class AbstractTestBase {
         switch(httpMethod) {
             case POST:
             case PUT:
+                method.setRequestHeader(HttpHeader.CONTENT_TYPE.asString(), "application/json");
                 if(requestBodyObject!=null) {
-                    StringRequestEntity stringRequestEntity = new StringRequestEntity(objectMapper.writeValueAsString(requestBodyObject), "application/json", "UTF-8");
-                    method.setRequestHeader(HttpHeader.CONTENT_TYPE.asString(), "application/json");
+                    String jsonBody = objectMapper.writeValueAsString(requestBodyObject);
+                    StringRequestEntity stringRequestEntity = new StringRequestEntity(jsonBody, "application/json", "UTF-8");
                     ((EntityEnclosingMethod)method).setRequestEntity(stringRequestEntity);
                 }
                 break;
@@ -101,8 +105,26 @@ public abstract class AbstractTestBase {
 
         assertEquals(expectedStatusCode, method.getStatusCode());
 
-        return method.getResponseBodyAsString();
+        String responseBody = method.getResponseBodyAsString();
 
+        System.out.println("responseBody=" + responseBody);
+        return responseBody;
+
+    }
+
+
+    protected void assertEmpty(Todo todo) {
+        assertNull("todo is not empty. todo="+todo, todo.getId());
+        assertNull("todo is not empty. todo="+todo, todo.getName());
+        assertNull("todo is not empty. todo="+todo, todo.getCreated());
+    }
+
+    protected void assertEmpty(Task task) {
+        assertNull("todo is not empty. todo="+task, task.getId());
+        assertNull("todo is not empty. todo="+task, task.getDescription());
+        assertNull("todo is not empty. todo="+task, task.getName());
+        assertNull("todo is not empty. todo="+task, task.getStatus());
+        assertNull("todo is not empty. todo="+task, task.getCreated());
     }
 
 

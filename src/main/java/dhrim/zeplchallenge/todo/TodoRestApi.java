@@ -18,7 +18,7 @@ public class TodoRestApi {
     @GET
     @Path("/todos")
     @Produces("application/json")
-    public Response getTodos() throws IOException {
+    public Response getTodoList() throws IOException {
         List<Todo> todoList = todoService.getTodoList();
         return new ResponseBuilder(Response.Status.OK, todoList).build();
     }
@@ -26,7 +26,15 @@ public class TodoRestApi {
     @GET
     @Path("/todos/{todoId}")
     @Produces("application/json")
-    public Response getTodoTasks(@PathParam("todoId") String todoId) throws IOException {
+    public Response getTodoAsList(@PathParam("todoId") String todoId) throws IOException {
+        List<Todo> todoList = todoService.getTodoAsList(todoId);
+        return new ResponseBuilder(Response.Status.OK, todoList).build();
+    }
+
+    @GET
+    @Path("/todos/{todoId}/tasks")
+    @Produces("application/json")
+    public Response getTaskList(@PathParam("todoId") String todoId) throws IOException {
         List<Task> taskList = todoService.getTaskList(todoId);
         return new ResponseBuilder(Response.Status.OK, taskList).build();
     }
@@ -34,24 +42,24 @@ public class TodoRestApi {
     @GET
     @Path("/todos/{todoId}/tasks/{taskId}")
     @Produces("application/json")
-    public Response getTodoTask(@PathParam("todoId") String todoId, @PathParam("taskId") String taskId) throws IOException {
-        Task task = todoService.getTodoTask(todoId, taskId);
+    public Response getTask(@PathParam("todoId") String todoId, @PathParam("taskId") String taskId) throws IOException {
+        Task task = todoService.getTask(todoId, taskId);
         return new ResponseBuilder(Response.Status.OK, task).build();
     }
 
     @GET
-    @Path("/todos/{todoId}/tasks/done}")
+    @Path("/todos/{todoId}/tasks/done")
     @Produces("application/json")
-    public Response getTodoTasksOfStatusDone(@PathParam("todoId") String todoId) throws IOException {
-        List<Task> taskList = todoService.getTodoTaskList(todoId, Task.Status.DONE);
+    public Response getTaskListOfStatusDone(@PathParam("todoId") String todoId) throws IOException {
+        List<Task> taskList = todoService.getTaskList(todoId, Task.Status.DONE);
         return new ResponseBuilder(Response.Status.OK, taskList).build();
     }
 
     @GET
-    @Path("/todos/{todoId}/tasks/not-done}")
+    @Path("/todos/{todoId}/tasks/not-done")
     @Produces("application/json")
-    public Response getTodoTasksOfStatusNotDone(@PathParam("todoId") String todoId) throws IOException {
-        List<Task> taskList = todoService.getTodoTaskList(todoId, Task.Status.NOT_DONE);
+    public Response getTaskListOfStatusNotDone(@PathParam("todoId") String todoId) throws IOException {
+        List<Task> taskList = todoService.getTaskList(todoId, Task.Status.NOT_DONE);
         return new ResponseBuilder(Response.Status.OK, taskList).build();
     }
 
@@ -74,6 +82,16 @@ public class TodoRestApi {
     }
 
     @PUT
+    @Path("/todos/{todoId}/tasks/{taskId}")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response updateTask(@PathParam("todoId") String todoId, @PathParam("taskId") String taskId, Task task) throws IOException {
+        Task newTask = todoService.updateTask(todoId, taskId, task);
+        return new ResponseBuilder(Response.Status.OK, newTask).build();
+    }
+
+
+    @DELETE
     @Path("/todos/{todoId}")
     @Produces("application/json")
     public Response deleteTodo(@PathParam("todoId") String todoId) throws IOException {
@@ -84,17 +102,9 @@ public class TodoRestApi {
     @DELETE
     @Path("/todos/{todoId}/tasks/{taskId}")
     @Produces("application/json")
-    public Response deleteTodoTask(@PathParam("todoId") String todoId, @PathParam("taskId") String taskId) throws IOException {
+    public Response deleteTask(@PathParam("todoId") String todoId, @PathParam("taskId") String taskId) throws IOException {
         todoService.deleteTask(todoId, taskId);
         return new ResponseBuilder(Response.Status.OK).build();
     }
-
-    // TODO : remove
-    @GET
-    @Path("/hello")
-    public String hello() {
-        return "hello";
-    }
-
 
 }

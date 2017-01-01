@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class MapDbTodRepoTest {
+public class MapDbTodoRepoTest {
 
     private MapDbTodoRepo repo = new MapDbTodoRepo();
 
@@ -16,7 +16,7 @@ public class MapDbTodRepoTest {
 
 
     @Test
-    public void test_createTodo_success () {
+    public void test_saveOrUpdate_and_getTodo () {
 
         // GIVEN
         Todo orgTodo = new TodoBuilder().id("id1").name("name1").build();

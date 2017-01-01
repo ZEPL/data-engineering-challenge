@@ -34,8 +34,10 @@ class MapDbTodoRepo extends AbstractMapBasedTodoRepo {
         if(db!=null) { return; }
         db = DBMaker
                 .fileDB(DB_FILE_NAME)
-                .closeOnJvmShutdown()
+                .closeOnJvmShutdownWeakReference()
+                .checksumHeaderBypass()
                 .make();
+
         log.info("File DbMap is initialized with file "+DB_FILE_NAME);
     }
 
@@ -46,7 +48,7 @@ class MapDbTodoRepo extends AbstractMapBasedTodoRepo {
     }
 
     @Override
-    protected Map<String, Map<String, Task>> getTasksMapInstance() {
+    protected Map<String, Map<String, Task>> getTaskMapMapInstance() {
         initDbIfNot();
         return db.hashMap("tasksMap", Serializer.STRING, serializer).createOrOpen();
     }
@@ -55,14 +57,13 @@ class MapDbTodoRepo extends AbstractMapBasedTodoRepo {
         new File(DB_FILE_NAME).delete();
     }
 
-    public class ObjectSerializer implements Serializer, Serializable {
+    private class ObjectSerializer implements Serializer, Serializable {
 
         @Override
         public void serialize(@NotNull DataOutput2 out, @NotNull Object value) throws IOException {
             if(!(value instanceof Serializable)) {
                 throw new IOException("value class is not implements Serializable. value="+value);
             }
-            // TODO : check if value is Serializable
             try (ByteArrayOutputStream bos = new ByteArrayOutputStream(); ObjectOutput objectOut = new ObjectOutputStream(bos)) {
                 objectOut.writeObject(value);
                 out.write(bos.toByteArray());

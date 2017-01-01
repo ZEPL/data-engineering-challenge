@@ -1,4 +1,6 @@
-package dhrim.zeplchallenge.todo;
+package dhrim.zeplchallenge.todo.exceptionhandler;
+
+import dhrim.zeplchallenge.todo.FailedMessage;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
