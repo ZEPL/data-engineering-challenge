@@ -7,6 +7,15 @@ $ mvn compile
 $ mvn exec:java -Dexec.mainClass=dhrim.zeplchallenge.todo.Main -Dexec.args="-p 8080"
 ```
 
+### TestCase
+```
+mvn test
+```
+3 test case exist.
+- TodoRestApiTest : call REST api by http request. It use mock Repo instead of real Repo.
+- IntegrationTest : test with real Repo.
+- MapDbTodoRepoTest : test working with MapDb.
+
 ### Architecture
 Resource -->  Service --> Repo
   - TodoRestApi : Jersey resource file. endpoint is defined. call TodoService
@@ -24,9 +33,8 @@ Use MapDb(http://www.mapdb.org/) for storing which use local file for persistenc
 - Didn't consider performance
 - Didn't treat detail exception case. Not defined in requirement as like duplicated name.
 
-### TestCase
-3 test case exist.
-- TodoRestApiTest : call REST api by http request. It use mock Repo instead of real Repo.
-- IntegrationTest : test with real Repo.
-- MapDbTodoRepoTest : test working with MapDb.
+### Change Endpoint
+GET /todos/:todo_id for get task list is not correct.
+
+I implemented with GET /todos/:todl_id/tasks instead.
 

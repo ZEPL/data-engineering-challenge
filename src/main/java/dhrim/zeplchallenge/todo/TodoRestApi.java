@@ -24,14 +24,6 @@ public class TodoRestApi {
     }
 
     @GET
-    @Path("/todos/{todoId}")
-    @Produces("application/json")
-    public Response getTodoAsList(@PathParam("todoId") String todoId) throws IOException {
-        List<Todo> todoList = todoService.getTodoAsList(todoId);
-        return new ResponseBuilder(Response.Status.OK, todoList).build();
-    }
-
-    @GET
     @Path("/todos/{todoId}/tasks")
     @Produces("application/json")
     public Response getTaskList(@PathParam("todoId") String todoId) throws IOException {

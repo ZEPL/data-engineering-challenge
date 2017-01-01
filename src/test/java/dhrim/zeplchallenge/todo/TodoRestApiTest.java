@@ -173,58 +173,6 @@ public class TodoRestApiTest extends AbstractTestBase {
 
     }
 
-    @Test
-    public void test_getTodoAsList() throws IOException {
-
-        // GIVEN
-        Todo todo1 = new TodoBuilder().id("id1").name("name1").created(new Date()).build();
-        mockTodoRepo.todoMap.put(todo1.getId(), todo1);
-        Todo todo2 = new TodoBuilder().id("id2").name("name2").created(new Date()).build();
-        mockTodoRepo.todoMap.put(todo2.getId(), todo2);
-
-        {
-            // WHEN
-            String responseBodyString = sendAndGetResponseBody(GET, "/todos/"+todo1.getId(), HttpStatus.OK_200);
-
-            // THEN
-            List<Todo> todoList = objectMapper.readValue(responseBodyString, new TypeReference<List<Todo>>() {});
-            assertEquals(1, todoList.size());
-            assertEquals(todo1, todoList.get(0));
-        }
-
-
-        {
-            // WHEN
-            String responseBodyString = sendAndGetResponseBody(GET, "/todos/"+todo2.getId(), HttpStatus.OK_200);
-
-            // THEN
-            List<Todo> todoList = objectMapper.readValue(responseBodyString, new TypeReference<List<Todo>>() {});
-            assertEquals(1, todoList.size());
-            assertEquals(todo2, todoList.get(0));
-        }
-
-    }
-
-    @Test
-    public void test_getTodoAsList_when_todo_not_exist() throws IOException {
-
-        // GIVEN
-        Todo todo1 = new TodoBuilder().id("id1").name("name1").created(new Date()).build();
-        mockTodoRepo.todoMap.put(todo1.getId(), todo1);
-        Todo todo2 = new TodoBuilder().id("id2").name("name2").created(new Date()).build();
-        mockTodoRepo.todoMap.put(todo2.getId(), todo2);
-
-        {
-            // WHEN
-            String responseBodyString = sendAndGetResponseBody(GET, "/todos/"+"NOT_EXISTING_TODO_ID", HttpStatus.OK_200);
-
-            // THEN
-            List<Todo> todoList = objectMapper.readValue(responseBodyString, new TypeReference<List<Todo>>() {});
-            assertEquals(0, todoList.size());
-        }
-
-    }
-
 
     @Test
     public void test_deleteTodo() throws IOException {
