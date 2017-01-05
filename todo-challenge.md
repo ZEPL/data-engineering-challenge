@@ -2,11 +2,10 @@
 This challenge is designed to assess the ability of a back-end candidate to write maintainable and well structured (reusable code, good coding practice) backend service.
 
 ## Submission instructions
- 1. Fork this repository on github.
- 2. Complete the project as described below within your fork.
+ 1. Create data-engineering-challenge repository on your github account.
+ 2. Complete the project as described below within your repository.
  3. Keep the commit history - don't squash.
- 4. Push all of your changes to your fork on github and submit a pull request to this repository.
-
+ 
 ## Project description
 Write a HTTP restful **TODO** service. This service will have an open api to let user manage his TODOs.
 
@@ -45,7 +44,7 @@ You can imagine a structure like this:
       ]
      ```
      
- * `GET /todos/:todo_id` Get todo tasks
+ * `GET /todos/:todo_id/tasks` Get todo tasks
      
      Payload will look like this
      
