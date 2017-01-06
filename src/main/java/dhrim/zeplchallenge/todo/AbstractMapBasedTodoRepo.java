@@ -89,9 +89,11 @@ public abstract class AbstractMapBasedTodoRepo implements TodoRepo {
         Map<String, Task> taskMap = taskMapMap.get(todoId);
         if(taskMap==null) {
             taskMap = new HashMap<>();
-            taskMapMap.put(todoId, taskMap);
         }
         taskMap.put(task.getId(), task);
+        // TODO : it's not good specific code related with MapDb.
+        // taskMapMap is clone instance when using MapDb.
+        taskMapMap.put(todoId, taskMap);
         return getTask(todoId, task.getId());
     }
 

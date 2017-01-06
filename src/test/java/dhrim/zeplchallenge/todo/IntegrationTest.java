@@ -9,6 +9,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+
+import static org.eclipse.jetty.http.HttpStatus.OK_200;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -48,7 +51,7 @@ public class IntegrationTest extends AbstractTestBase {
 
         // WHEN
         Todo todo = new TodoBuilder().name("name1").build();
-        String responseBodyString = sendAndGetResponseBody(POST, "/todos", todo, HttpStatus.OK_200);
+        String responseBodyString = sendAndGetResponseBody(POST, "/todos", todo, OK_200);
 
         // THEN
         assertNotNull(responseBodyString);
@@ -72,11 +75,23 @@ public class IntegrationTest extends AbstractTestBase {
         httpClient.executeMethod(method);
 
         // THEN
-        assertEquals(HttpStatus.OK_200, method.getStatusCode());
-
+        assertEquals(OK_200, method.getStatusCode());
 
     }
 
 
+    @Test
+    public void bug_fix_of_task_creating_failed() throws IOException {
+
+        // GIVEN
+        Todo todo = new TodoBuilder().name("name1").build();
+        String responseBodyString = sendAndGetResponseBody(POST, "/todos", todo, OK_200);
+        todo = objectMapper.readValue(responseBodyString, Todo.class);
+
+        // WHEN
+        Task task = new TaskBuilder().name("taskName1").description("task description 1").build();
+        sendAndGetResponseBody(POST, "/todos/"+todo.getId()+"/tasks", task, HttpStatus.OK_200);
+
+    }
 
 }
