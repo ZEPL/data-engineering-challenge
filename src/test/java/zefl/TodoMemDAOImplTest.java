@@ -58,4 +58,11 @@ public class TodoMemDAOImplTest {
         List<Todo> result = dao.findAll();
         assertEquals(expected, result);
     }
+
+    @Test
+    public void testGetEmptyTask() throws Exception {
+        List<Task> result = dao.findTasksByTodoId("1");
+        List<Task> expected = new ArrayList<>();
+        assertEquals(expected, result);
+    }
 }

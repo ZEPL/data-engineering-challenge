@@ -16,4 +16,9 @@ public class TodoMemDAOImpl implements TodoDAO{
     public List<Todo> findAll() {
         return new ArrayList<>(todoMap.values());
     }
+
+    @Override
+    public List<Task> findTasksByTodoId(String todoId) {
+        return new ArrayList<>();
+    }
 }
