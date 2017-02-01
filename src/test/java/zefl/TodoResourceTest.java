@@ -1,5 +1,17 @@
 package zefl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.core.GenericType;
+
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -7,17 +19,6 @@ import org.glassfish.jersey.test.JerseyTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Application;
-import javax.ws.rs.core.GenericType;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class TodoResourceTest extends JerseyTest{
     @Override
@@ -55,7 +56,7 @@ public class TodoResourceTest extends JerseyTest{
         assertNotNull(todoResponse.getId());
         assertNotNull(todoResponse.getCreated());
         assertEquals("todo", todoResponse.getName());
-
+        System.out.println(todoResponse);
         List<Todo> todoResults = target("todos").request().get(new GenericType<List<Todo>>(){});
         assertEquals(1, todoResults.size());
         Todo resultTodo = todoResults.get(0);
