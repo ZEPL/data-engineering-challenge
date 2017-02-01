@@ -4,10 +4,12 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Path("todos")
 @Produces(MediaType.APPLICATION_JSON)
 public class TodoResource {
+    TodoDAO todoDao = new TodoMemDAOImpl();
 
     /**
      *
@@ -16,8 +18,8 @@ public class TodoResource {
      * @return JSON of todos
      */
     @GET
-    public Todo[] getTodos() {
-        return new Todo[] {};
+    public List<Todo> getTodos() {
+        return todoDao.findAll();
     }
 
 }
