@@ -8,12 +8,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.GenericType;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class TodoResourceTest extends JerseyTest{
     @Override
@@ -45,7 +49,16 @@ public class TodoResourceTest extends JerseyTest{
 
     @Test
     public void insertAndRead1TodoTest() throws Exception {
-        Todo[] responseTodos = target("todos").request().get(Todo[].class);
-        assertArrayEquals(new Todo[] {}, responseTodos);
+        Map<String, String> data = new HashMap<>();
+        data.put("name", "todo");
+        Todo todoResponse = target("todos").request().post(Entity.json(data), Todo.class);
+        assertNotNull(todoResponse.getId());
+        assertNotNull(todoResponse.getCreated());
+        assertEquals("todo", todoResponse.getName());
+
+        List<Todo> todoResults = target("todos").request().get(new GenericType<List<Todo>>(){});
+        assertEquals(1, todoResults.size());
+        Todo resultTodo = todoResults.get(0);
+        assertEquals("todo", resultTodo.getName());
     }
 }

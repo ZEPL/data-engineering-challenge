@@ -1,15 +1,14 @@
 package zefl;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.Map;
 
 @Path("todos")
 @Produces(MediaType.APPLICATION_JSON)
 public class TodoResource {
-    TodoDAO todoDao = new TodoMemDAOImpl();
+    TodoService todoService = new TodoServiceImpl();
 
     /**
      *
@@ -19,7 +18,14 @@ public class TodoResource {
      */
     @GET
     public List<Todo> getTodos() {
-        return todoDao.findAll();
+        return todoService.getTodos();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Todo createTodo(Map<String, String> data) {
+        String name = data.get("name");
+        return todoService.createTodo(name);
     }
 
 }

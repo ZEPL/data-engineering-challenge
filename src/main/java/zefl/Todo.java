@@ -8,20 +8,20 @@ public class Todo {
     String name;
     // String is enough for the requirements now.
     String created;
-    Map<String, Task> tasks;
+    Map<String, Task> taskMap;
 
     public Todo() {
         // Only for jackson - to avoid com.fasterxml.jackson.databind.JsonMappingException
     }
 
-    public Todo(String id, String name, String created, Map<String, Task> tasks) {
+    public Todo(String id, String name, String created, Map<String, Task> taskMap) {
         this.id = id;
         this.name = name;
         this.created = created;
-        if (tasks == null) {
-            this.tasks = new HashMap<>();
+        if (taskMap == null) {
+            this.taskMap = new HashMap<>();
         } else {
-            this.tasks = tasks;
+            this.taskMap = taskMap;
         }
     }
 
@@ -54,11 +54,11 @@ public class Todo {
     }
 
     public Map<String, Task> getTaskMap() {
-        return tasks;
+        return taskMap;
     }
 
-    public void setTasks(Map<String, Task> tasks) {
-        this.tasks = tasks;
+    public void setTaskMap(Map<String, Task> taskMap) {
+        this.taskMap = taskMap;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class Todo {
         if (id != null ? !id.equals(todo.id) : todo.id != null) return false;
         if (name != null ? !name.equals(todo.name) : todo.name != null) return false;
         if (created != null ? !created.equals(todo.created) : todo.created != null) return false;
-        return tasks != null ? tasks.equals(todo.tasks) : todo.tasks == null;
+        return taskMap != null ? taskMap.equals(todo.taskMap) : todo.taskMap == null;
 
     }
 
@@ -80,7 +80,7 @@ public class Todo {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (created != null ? created.hashCode() : 0);
-        result = 31 * result + (tasks != null ? tasks.hashCode() : 0);
+        result = 31 * result + (taskMap != null ? taskMap.hashCode() : 0);
         return result;
     }
 
@@ -90,7 +90,7 @@ public class Todo {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", created='" + created + '\'' +
-                ", tasks=" + tasks +
+                ", taskMap=" + taskMap +
                 '}';
     }
 }
