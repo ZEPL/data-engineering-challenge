@@ -36,6 +36,9 @@ public class TodoMemDAOImpl implements TodoDAO{
     @Override
     public boolean upsertTask(String todoId, Task task) {
         Todo todo = findTodoById(todoId);
+        if (todo == null) {
+            return false;
+        }
         Map<String, Task> taskMap = todo.getTaskMap();
         taskMap.put(task.getId(), task);
         return true;
