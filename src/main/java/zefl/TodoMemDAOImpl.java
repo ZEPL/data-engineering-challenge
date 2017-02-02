@@ -53,4 +53,18 @@ public class TodoMemDAOImpl implements TodoDAO{
         return todo.getTaskMap().get(taskId);
     }
 
+    @Override
+    public boolean deleteTodo(String todoId) {
+        return todoMap.remove(todoId) != null;
+    }
+
+    @Override
+    public boolean deleteTask(String todoId, String taskId) {
+        Todo todo = findTodoById(todoId);
+        if (todo == null) {
+            return false;
+        }
+        return todo.getTaskMap().remove(taskId) != null;
+    }
+
 }

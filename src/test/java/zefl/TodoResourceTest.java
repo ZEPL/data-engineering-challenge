@@ -225,4 +225,42 @@ public class TodoResourceTest extends JerseyTest{
         assertEquals(new ArrayList<Task>(), tasks);
     }
 
+    @Test
+    public void test404WhenDeleteTodoWithNotexistId() throws Exception {
+        is404(target("todos/invalidid").request().delete());
+    }
+
+    @Test
+    public void testDeleteTodo() throws Exception {
+        final Todo todo = callCreateTodo();
+        Map response = target("todos/" + todo.getId()).request().delete(Map.class);
+        assertEquals(new HashMap(), response);
+        // Check deleted or not
+        emptyTodosTest();
+    }
+
+    @Test
+    public void test404WhenDeleteTaskWithNotexistTodoId() throws Exception {
+        is404(target("todos/invalidid/tasks/invalidtask-id").request().delete());
+    }
+
+    @Test
+    public void test404WhenDeleteTaskWithNotexistTaskId() throws Exception {
+        final Todo todo = callCreateTodo();
+        is404(target("todos/" + todo.getId() + "/tasks/invalidtask-id").request().delete());
+    }
+
+    @Test
+    public void testDeleteTask() throws Exception {
+        final Todo todo = callCreateTodo();
+        final Task task = callCreateTask(todo);
+
+        Map response = target("todos/" + todo.getId() + "/tasks/" + task.getId()).request().delete(Map.class);
+        assertEquals(new HashMap(), response);
+        // Check deleted or not
+        List<Task> responseTodos = target("todos/"+ todo.getId() +"/tasks")
+                .request().get(new GenericType<List<Task>>(){});
+        assertEquals(new ArrayList<Task>(), responseTodos);
+    }
+
 }

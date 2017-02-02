@@ -11,4 +11,8 @@ public interface TodoDAO {
     boolean upsertTask(String todoId, Task task);
 
     Task findTaskBy(String todoId, String taskId);
+
+    boolean deleteTodo(String todoId);
+
+    boolean deleteTask(String todoId, String taskId);
 }

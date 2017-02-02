@@ -51,6 +51,16 @@ public class TodoServiceImpl implements TodoService {
         return getTasksAndFilterByStatus(todoId, STATUS_NOT_DONE);
     }
 
+    @Override
+    public boolean removeTodo(String todoId) {
+        return todoDao.deleteTodo(todoId);
+    }
+
+    @Override
+    public boolean removeTask(String todoId, String taskId) {
+        return todoDao.deleteTask(todoId, taskId);
+    }
+
     private List<Task> getTasksAndFilterByStatus(String todoId, String status) {
         List<Task> tasks = todoDao.findTasksByTodoId(todoId);
         return filterTaksByPredicate(tasks, equalsStatus(status));

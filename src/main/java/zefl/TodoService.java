@@ -21,4 +21,8 @@ public interface TodoService {
     Task updateTask(String todoId, Task task);
 
     List<Task> getNotDoneTasks(String id);
+
+    boolean removeTodo(String todoId);
+
+    boolean removeTask(String todoId, String taskId);
 }
