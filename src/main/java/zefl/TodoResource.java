@@ -24,6 +24,20 @@ public class TodoResource {
 
 
     @GET
+    @Path( "{todoId}/tasks/{taskId}" )
+    public Task getTask(@PathParam("todoId") String todoId,@PathParam("taskId") String taskId) {
+        Todo todo = todoService.getTodo(todoId);
+        if (todo == null) {
+            throw new WebApplicationException(404);
+        }
+        Task task = todo.getTaskMap().get(taskId);
+        if (task == null) {
+            throw new WebApplicationException(404);
+        }
+        return task;
+    }
+
+    @GET
     @Path( "{id}/tasks" )
     public List<Task> getTasks(@PathParam("id") String id) {
         Todo todo = todoService.getTodo(id);

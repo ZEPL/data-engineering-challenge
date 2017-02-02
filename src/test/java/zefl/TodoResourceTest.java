@@ -82,23 +82,39 @@ public class TodoResourceTest extends JerseyTest{
 
     @Test
     public void testGetEmptyTasks() throws Exception {
-        final Map<String, String> data = new HashMap<>();
-        data.put("name", "todo");
-        final Todo todoResponse = target("todos").request().post(Entity.json(data), Todo.class);
-        final String id = todoResponse.getId();
-        assertNotNull(id);
+        final Todo todoResponse = callCreateTodo();
 
-        List<Task> responseTodos = target("todos/"+id+"/tasks").request().get(new GenericType<List<Task>>(){});
+        List<Task> responseTodos = target("todos/"+ todoResponse.getId() +"/tasks")
+                .request().get(new GenericType<List<Task>>(){});
         assertEquals(new ArrayList<Task>(), responseTodos);
     }
 
     @Test
+    public void test404WhenGetTaskWithInvalidTodoId() throws Exception {
+        Response output = target("todos/invalidTodoId/task/invalidId").request().get();
+        assertEquals(404, output.getStatus());
+    }
+
+    @Test
+    public void test404WhenGetTaskWithInvalidTaskId() throws Exception {
+        final Todo todoResponse = callCreateTodo();
+
+        Response output = target("todos/" + todoResponse.getId() + "/task/invalidId").request().get();
+        assertEquals(404, output.getStatus());
+    }
+
+    private Todo callCreateTodo() {
+        final Map<String, String> data = new HashMap<>();
+        data.put("name", "todo");
+        Todo newTodo = target("todos").request().post(Entity.json(data), Todo.class);
+        assertNotNull(newTodo.getId());
+        return newTodo;
+    }
+
+    @Test
     public void testInsertAndGet1Task() throws Exception {
-        final Map<String, String> todoData = new HashMap<>();
-        todoData.put("name", "todo");
-        final Todo newTodo = target("todos").request().post(Entity.json(todoData), Todo.class);
+        final Todo newTodo = callCreateTodo();
         final String todoId = newTodo.getId();
-        assertNotNull(todoId);
 
         final Map<String, String> taskData = new HashMap<>();
         taskData.put("name", "task10");
@@ -109,7 +125,12 @@ public class TodoResourceTest extends JerseyTest{
         final String taskId = newTasks.getId();
         assertNotNull(taskId);
 
+        // Check by getting all tasks
         List<Task> responseTasks = target("todos/"+todoId+"/tasks").request().get(new GenericType<List<Task>>(){});
         assertEquals(1, responseTasks.size());
+
+        // Check by getting the task
+        Task returnedTask = target("todos/" + todoId + "/tasks/"+ taskId).request().get(Task.class);
+        assertNotNull(returnedTask.getCreated());
     }
 }
