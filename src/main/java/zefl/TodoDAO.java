@@ -9,4 +9,6 @@ public interface TodoDAO {
 
     List<Task> findTasksByTodoId(String todoId);
     boolean upsertTask(String todoId, Task task);
+
+    Task findTaskBy(String todoId, String taskId);
 }

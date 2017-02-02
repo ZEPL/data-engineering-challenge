@@ -2,12 +2,10 @@ package zefl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class TodoServiceImpl implements TodoService {
-    // todo enum??
-    public static final String STATUS_NOT_DONE = "NOT_DONE";
-    public static final String STATUS_DONE = "DONE";
-
     // Todo : replace this using Guice
     static TodoDAO todoDao = new TodoMemDAOImpl();
 
@@ -41,6 +39,48 @@ public class TodoServiceImpl implements TodoService {
             return null;
         }
         return newTask;
+    }
+
+    @Override
+    public List<Task> getDoneTasks(String todoId) {
+        return getTasksAndFilterByStatus(todoId, STATUS_DONE);
+    }
+
+    @Override
+    public List<Task> getNotDoneTasks(String todoId) {
+        return getTasksAndFilterByStatus(todoId, STATUS_NOT_DONE);
+    }
+
+    private List<Task> getTasksAndFilterByStatus(String todoId, String status) {
+        List<Task> tasks = todoDao.findTasksByTodoId(todoId);
+        return filterTaksByPredicate(tasks, equalsStatus(status));
+    }
+
+    private Predicate<Task> equalsStatus(String status) {
+        return task -> status.equals(task.getStatus());
+    }
+
+    private List<Task> filterTaksByPredicate(List<Task> tasks, Predicate<Task> predicate) {
+        if (tasks == null) {
+            return null;
+        }
+        return tasks.stream()
+                .filter( predicate )
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Task getTask(String todoId, String taskId) {
+        return todoDao.findTaskBy(todoId, taskId);
+    }
+
+    @Override
+    public Task updateTask(String todoId, Task task) {
+        if (todoDao.upsertTask(todoId, task)) {
+            return task;
+        } else {
+            return null;
+        }
     }
 
     /**

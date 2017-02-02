@@ -47,6 +47,28 @@ public class TodoResource {
         return new ArrayList<>(todo.getTaskMap().values());
     }
 
+    @GET
+    @Path( "{id}/tasks/done" )
+    public List<Task> getDoneTasks(@PathParam("id") String id) {
+        List<Task> tasks = todoService.getDoneTasks(id);
+        if (tasks == null) {
+            // todo Specify more error cases?
+            throw new WebApplicationException(404);
+        }
+        return tasks;
+    }
+
+    @GET
+    @Path( "{id}/tasks/not-done" )
+    public List<Task> getNotDoneTasks(@PathParam("id") String id) {
+        List<Task> tasks = todoService.getNotDoneTasks(id);
+        if (tasks == null) {
+            // todo Specify more error cases?
+            throw new WebApplicationException(404);
+        }
+        return tasks;
+    }
+
     @POST
     @Path( "{id}/tasks" )
     public Task createTasks(@PathParam("id") String todoId, Map<String, String> data) {
@@ -61,6 +83,29 @@ public class TodoResource {
             throw new WebApplicationException(404);
         }
         return newTask;
+    }
+
+    @PUT
+    @Path( "{todoId}/tasks/{taskId}" )
+    public Task updateTask(@PathParam("todoId") String todoId,
+                           @PathParam("taskId") String taskId,
+                           Map<String, String> data) {
+        String name = data.get("name");
+        String description = data.get("description");
+        String status = data.get("status");
+        Task task = todoService.getTask(todoId, taskId);
+        if (task == null) {
+            throw new WebApplicationException(404);
+        }
+        task.setName(name);
+        task.setDescription(description);
+        task.setStatus(status);
+        Task newTask = todoService.updateTask(todoId, task);
+        if (newTask == null) {
+            // This should not happen...but in concurreny situation...
+            throw new WebApplicationException(404);
+        }
+        return task;
     }
 
     @POST

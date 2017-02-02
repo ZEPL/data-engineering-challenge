@@ -81,7 +81,7 @@ public class TodoResourceTest extends JerseyTest{
     }
 
     @Test
-    public void testGetEmptyTasks() throws Exception {
+    public void testEmptyResultWhenGetTasks() throws Exception {
         final Todo todoResponse = callCreateTodo();
 
         List<Task> responseTodos = target("todos/"+ todoResponse.getId() +"/tasks")
@@ -111,26 +111,119 @@ public class TodoResourceTest extends JerseyTest{
         return newTodo;
     }
 
+    private Task callCreateTask(Todo todo) {
+        final Map<String, String> taskData = new HashMap<>();
+        taskData.put("name", "task10");
+        taskData.put("description", "task-desc10");
+        Task task = target("todos/" + todo.getId() + "/tasks")
+                .request()
+                .post(Entity.json(taskData), Task.class);
+        assertNotNull(task.getId());
+        return task;
+    }
+
+    private Task callUpdateTask(Todo todo, Task task) {
+        final Map<String, String> taskData = new HashMap<>();
+        taskData.put("name", "task1010");
+        taskData.put("description", "task-desc1010");
+        taskData.put("status", "DONE");
+        Task newTask = target("todos/" + todo.getId() + "/tasks/" + task.getId())
+                .request()
+                .put(Entity.json(taskData), Task.class);
+        assertNotNull(newTask.getId());
+        assertEquals("DONE", newTask.getStatus());
+        return newTask;
+    }
+
     @Test
     public void testInsertAndGet1Task() throws Exception {
         final Todo newTodo = callCreateTodo();
         final String todoId = newTodo.getId();
 
-        final Map<String, String> taskData = new HashMap<>();
-        taskData.put("name", "task10");
-        taskData.put("description", "task-desc10");
-        final Task newTasks = target("todos/"+todoId+"/tasks")
-                .request()
-                .post(Entity.json(taskData), Task.class);
-        final String taskId = newTasks.getId();
-        assertNotNull(taskId);
+        final Task newTask = callCreateTask(newTodo);
 
         // Check by getting all tasks
         List<Task> responseTasks = target("todos/"+todoId+"/tasks").request().get(new GenericType<List<Task>>(){});
         assertEquals(1, responseTasks.size());
 
         // Check by getting the task
-        Task returnedTask = target("todos/" + todoId + "/tasks/"+ taskId).request().get(Task.class);
+        Task returnedTask = target("todos/" + todoId + "/tasks/" + newTask.getId()).request().get(Task.class);
         assertNotNull(returnedTask.getCreated());
     }
+
+    @Test
+    public void test404WhenGetDoneTasksWithInvalidTodoId() throws Exception {
+        Response output = target("todos/invalidid/tasks/done").request().get();
+        assertEquals(404, output.getStatus());
+    }
+
+    @Test
+    public void testEmptyResultWhenGetDoneTasksWithEmptyTasks() throws Exception {
+        final Todo todoResponse = callCreateTodo();
+
+        final List<Task> tasks = target("todos/"+ todoResponse.getId() +"/tasks/done")
+                .request().get(new GenericType<List<Task>>(){});
+        assertEquals(new ArrayList<Task>(), tasks);
+    }
+
+    @Test
+    public void testGetDoneTasksWith1NotDoneTask() throws Exception {
+        final Todo todoResponse = callCreateTodo();
+
+        final Task newTask = callCreateTask(todoResponse);
+
+        final List<Task> tasks = target("todos/"+ todoResponse.getId() +"/tasks/done")
+                .request().get(new GenericType<List<Task>>(){});
+        assertEquals(new ArrayList<Task>(), tasks);
+    }
+
+    @Test
+    public void testGetDoneTasksWith1DoneTask() throws Exception {
+        final Todo todo = callCreateTodo();
+        final Task task = callCreateTask(todo);
+        final Task newTask = callUpdateTask(todo, task);
+
+        final List<Task> tasks = target("todos/"+ todo.getId() +"/tasks/done")
+                .request().get(new GenericType<List<Task>>(){});
+        assertEquals(1, tasks.size());
+        assertEquals(TodoService.STATUS_DONE, tasks.get(0).getStatus());
+    }
+
+    @Test
+    public void test404WhenGetNotDoneTasksWithInvalidTodoId() throws Exception {
+        Response output = target("todos/invalidid/tasks/not-done").request().get();
+        assertEquals(404, output.getStatus());
+    }
+
+    @Test
+    public void testEmptyResultWhenGetNotDoneTasksWithEmptyTasks() throws Exception {
+        final Todo todoResponse = callCreateTodo();
+
+        final List<Task> tasks = target("todos/"+ todoResponse.getId() +"/tasks/not-done")
+                .request().get(new GenericType<List<Task>>(){});
+        assertEquals(new ArrayList<Task>(), tasks);
+    }
+
+    @Test
+    public void testGetNotDoneTasksWith1NotDoneTask() throws Exception {
+        final Todo todo = callCreateTodo();
+        callCreateTask(todo);
+
+        final List<Task> tasks = target("todos/"+ todo.getId() +"/tasks/not-done")
+                .request().get(new GenericType<List<Task>>(){});
+        assertEquals(1, tasks.size());
+        assertEquals(TodoService.STATUS_NOT_DONE, tasks.get(0).getStatus());
+    }
+
+    @Test
+    public void testGetNotDoneTasksWith1DoneTask() throws Exception {
+        final Todo todo = callCreateTodo();
+        final Task task = callCreateTask(todo);
+        callUpdateTask(todo, task);
+
+        final List<Task> tasks = target("todos/"+ todo.getId() +"/tasks/not-done")
+                .request().get(new GenericType<List<Task>>(){});
+        assertEquals(new ArrayList<Task>(), tasks);
+    }
+
 }

@@ -27,7 +27,7 @@ public class TodoMemDAOImpl implements TodoDAO{
     public List<Task> findTasksByTodoId(String todoId) {
         Todo todo = todoMap.get(todoId);
         if (todo == null) {
-            return new ArrayList<>();
+            return null;
         } else {
             return new ArrayList<>(todo.getTaskMap().values());
         }
@@ -42,6 +42,15 @@ public class TodoMemDAOImpl implements TodoDAO{
         Map<String, Task> taskMap = todo.getTaskMap();
         taskMap.put(task.getId(), task);
         return true;
+    }
+
+    @Override
+    public Task findTaskBy(String todoId, String taskId) {
+        Todo todo = findTodoById(todoId);
+        if (todo == null) {
+            return null;
+        }
+        return todo.getTaskMap().get(taskId);
     }
 
 }
