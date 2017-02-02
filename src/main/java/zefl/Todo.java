@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Todo {
-    String id;
-    String name;
+    private String id;
+    private String name;
     // String is enough for the requirements now.
-    String created;
-    Map<String, Task> taskMap;
+    private String created;
+    private Map<String, Task> taskMap;
 
     public Todo() {
         // Only for jackson - to avoid com.fasterxml.jackson.databind.JsonMappingException

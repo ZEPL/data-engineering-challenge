@@ -2,11 +2,11 @@ package zefl;
 
 public class Task {
 
-    String id;
-    String name;
-    String description;
-    String status;
-    String created;
+    private String id;
+    private String name;
+    private String description;
+    private String status;
+    private String created;
 
     public Task() {
 
