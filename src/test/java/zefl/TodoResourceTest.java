@@ -1,5 +1,18 @@
 package zefl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
+
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
@@ -9,18 +22,6 @@ import org.glassfish.jersey.test.TestProperties;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Application;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class TodoResourceTest extends JerseyTest{
     @Override
@@ -70,14 +71,16 @@ public class TodoResourceTest extends JerseyTest{
 
     @Test
     public void test404WhenGetTasksWithInvalidTodoid() throws Exception {
-        Response output = target("todos/invalidid/tasks").request().get();
-        assertEquals(404, output.getStatus());
+        is404(target("todos/invalidid/tasks").request().get());
+    }
+
+    private void is404(Response response) {
+        assertEquals(404, response.getStatus());
     }
 
     @Test
     public void test404WhenCreateTasksWithInvalidTodoid() throws Exception {
-        Response output = target("todos/invalidid/tasks").request().post(null);
-        assertEquals(404, output.getStatus());
+        is404(target("todos/invalidid/tasks").request().post(null));
     }
 
     @Test
@@ -91,16 +94,14 @@ public class TodoResourceTest extends JerseyTest{
 
     @Test
     public void test404WhenGetTaskWithInvalidTodoId() throws Exception {
-        Response output = target("todos/invalidTodoId/task/invalidId").request().get();
-        assertEquals(404, output.getStatus());
+        is404(target("todos/invalidTodoId/task/invalidId").request().get());
     }
 
     @Test
     public void test404WhenGetTaskWithInvalidTaskId() throws Exception {
         final Todo todoResponse = callCreateTodo();
 
-        Response output = target("todos/" + todoResponse.getId() + "/task/invalidId").request().get();
-        assertEquals(404, output.getStatus());
+        is404(target("todos/" + todoResponse.getId() + "/task/invalidId").request().get());
     }
 
     private Todo callCreateTodo() {
@@ -153,8 +154,7 @@ public class TodoResourceTest extends JerseyTest{
 
     @Test
     public void test404WhenGetDoneTasksWithInvalidTodoId() throws Exception {
-        Response output = target("todos/invalidid/tasks/done").request().get();
-        assertEquals(404, output.getStatus());
+        is404(target("todos/invalidid/tasks/done").request().get());
     }
 
     @Test
@@ -191,8 +191,7 @@ public class TodoResourceTest extends JerseyTest{
 
     @Test
     public void test404WhenGetNotDoneTasksWithInvalidTodoId() throws Exception {
-        Response output = target("todos/invalidid/tasks/not-done").request().get();
-        assertEquals(404, output.getStatus());
+        is404(target("todos/invalidid/tasks/not-done").request().get());
     }
 
     @Test
