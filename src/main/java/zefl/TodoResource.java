@@ -1,6 +1,8 @@
 package zefl;
 
 import com.google.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -12,6 +14,7 @@ import java.util.Map;
 @Path("todos")
 @Produces(MediaType.APPLICATION_JSON)
 public class TodoResource {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TodoMain.class);
 
     public void setTodoService(TodoService todoService) {
         this.todoService = todoService;
@@ -28,6 +31,7 @@ public class TodoResource {
      */
     @GET
     public List<Todo> getTodos() {
+        LOGGER.info("GET /todos");
         return todoService.getTodos();
     }
 
@@ -35,6 +39,7 @@ public class TodoResource {
     @GET
     @Path( "{todoId}/tasks/{taskId}" )
     public Task getTask(@PathParam("todoId") String todoId,@PathParam("taskId") String taskId) {
+        LOGGER.info("GET /todos/{}/tasks/{}", todoId, taskId);
         Todo todo = todoService.getTodo(todoId);
         if (todo == null) {
             throw new WebApplicationException(404);
@@ -49,9 +54,11 @@ public class TodoResource {
     @DELETE
     @Path( "{todoId}" )
     public Map deleteTodo(@PathParam("todoId") String todoId) {
+        LOGGER.info("DELETE /todos/{}", todoId);
         if (todoService.removeTodo(todoId) ) {
             return new HashMap();
         } else {
+            LOGGER.error("DELETE /todos/{} failed", todoId);
             throw new WebApplicationException(404);
         }
     }
