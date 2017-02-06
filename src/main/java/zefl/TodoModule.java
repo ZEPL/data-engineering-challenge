@@ -10,6 +10,7 @@ public class TodoModule extends AbstractModule {
     protected void configure() {
         bind(TodoResource.class);
         bind(TodoService.class).to(TodoServiceImpl.class);
+        bind(TodoDAO.class).to(TodoMemDAOImpl.class);
     }
 
     @Provides

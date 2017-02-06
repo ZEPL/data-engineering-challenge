@@ -1,5 +1,6 @@
 package zefl;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,6 +16,11 @@ public class TodoMemDAOImplTest {
     @Before
     public void setUp() throws Exception {
         dao = new TodoMemDAOImpl();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        TestTodoResource.resetData();
     }
 
     @Test

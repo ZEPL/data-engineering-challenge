@@ -25,4 +25,8 @@ public interface TodoService {
     boolean removeTodo(String todoId);
 
     boolean removeTask(String todoId, String taskId);
+
+    TodoDAO getTodoDao();
+
+    void setTodoDao(TodoDAO todoDao);
 }

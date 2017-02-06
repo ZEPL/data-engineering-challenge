@@ -1,13 +1,15 @@
 package zefl;
 
+import com.google.inject.Inject;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class TodoServiceImpl implements TodoService {
-    // Todo : replace this using Guice
-    static TodoDAO todoDao = new TodoMemDAOImpl();
+    @Inject
+    TodoDAO todoDao;
 
     @Override
     public List<Todo> getTodos() {
@@ -93,10 +95,13 @@ public class TodoServiceImpl implements TodoService {
         }
     }
 
-    /**
-     * only for testing!!
-     */
-    public static void resetDao() {
-        todoDao = new TodoMemDAOImpl();
+    @Override
+    public TodoDAO getTodoDao() {
+        return todoDao;
+    }
+
+    @Override
+    public void setTodoDao(TodoDAO todoDao) {
+        this.todoDao = todoDao;
     }
 }

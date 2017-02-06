@@ -22,13 +22,12 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class TodoResourceTest extends JerseyTest{
+public class TodoResourceTest extends JerseyTest {
     @Override
     protected Application configure() {
         enable(TestProperties.LOG_TRAFFIC);
         enable(TestProperties.DUMP_ENTITY);
-
-        return new ResourceConfig(TodoResource.class)
+        return new ResourceConfig(TestTodoResource.class)
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, "INFO")
                 .register(JacksonFeature.class);
     }
@@ -46,7 +45,7 @@ public class TodoResourceTest extends JerseyTest{
     @After
     public void tearDown() throws Exception {
         super.tearDown();
-        TodoServiceImpl.resetDao();
+        TestTodoResource.resetData();
     }
 
     @Test

@@ -3,7 +3,7 @@ package zefl;
 import java.util.*;
 
 public class TodoMemDAOImpl implements TodoDAO{
-    Map<String, Todo> todoMap = new HashMap<>();
+    static Map<String, Todo> todoMap = new HashMap<>();
 
     @Override
     public boolean upsertTodo(Todo todo) {
@@ -67,4 +67,7 @@ public class TodoMemDAOImpl implements TodoDAO{
         return todo.getTaskMap().remove(taskId) != null;
     }
 
+    public static void resetData() {
+        todoMap = new HashMap<>();
+    }
 }
