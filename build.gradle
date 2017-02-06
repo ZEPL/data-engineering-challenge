@@ -10,6 +10,15 @@ task runApp(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath + files('config/')
 }
 
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Todo server',
+                'Implementation-Version': '0.0.1',
+                'Main-Class': 'zefl.TodoMain'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
 
 repositories {
