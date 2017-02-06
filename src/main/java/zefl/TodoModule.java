@@ -16,6 +16,6 @@ public class TodoModule extends AbstractModule {
     @Provides
     @Named("content")
     public String provideContent() {
-        return "Got it!";
+        return "OK";
     }
 }
