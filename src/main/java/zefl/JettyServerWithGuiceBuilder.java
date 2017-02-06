@@ -4,8 +4,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceFilter;
-import com.google.inject.servlet.ServletModule;
-import com.squarespace.jersey2.guice.JerseyGuiceModule;
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.FilterHolder;
@@ -15,7 +13,6 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 
 import javax.servlet.DispatcherType;
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -29,12 +26,8 @@ public class JettyServerWithGuiceBuilder {
         this.port = port;
     }
 
-    public Server build() {
+    public Server build(List<AbstractModule> modules) {
         // Init Guice&Jersey2 interaction related
-        List<AbstractModule> modules = Arrays.asList(
-                new JerseyGuiceModule("__HK2_Generated_0"),
-                new ServletModule(),
-                new TodoModule());
 
         Injector injector = Guice.createInjector(modules);
         JerseyGuiceUtils.install(injector);

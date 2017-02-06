@@ -67,4 +67,6 @@ public class SimpleIntegrationTodoResourceTest {
         assertEquals(1, tasks.size());
         assertEquals(TodoService.STATUS_DONE, tasks.get(0).getStatus());
     }
+
+    // Todo - Add more ITs
 }

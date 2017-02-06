@@ -3,16 +3,14 @@ package zefl;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
-import com.google.inject.name.Names;
 
-public class TodoModule extends AbstractModule {
+public class TestTodoModule extends AbstractModule {
 
     @Override
     protected void configure() {
         bind(TodoResource.class);
         bind(TodoService.class).to(TodoServiceImpl.class);
-        bind(TodoDAO.class).to(TodoSimplePersistentDaoImpl.class);
-        bindConstant().annotatedWith(Names.named("dbFilename")).to("todo.db");
+        bind(TodoDAO.class).to(TodoMemDAOImpl.class);
     }
 
     @Provides

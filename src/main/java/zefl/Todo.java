@@ -1,9 +1,10 @@
 package zefl;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Todo {
+public class Todo implements Serializable {
     private String id;
     private String name;
     // String is enough for the requirements now.

@@ -1,14 +1,25 @@
 package zefl;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.servlet.ServletModule;
+import com.squarespace.jersey2.guice.JerseyGuiceModule;
 import org.eclipse.jetty.server.Server;
 import org.junit.rules.ExternalResource;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class ServerRule extends ExternalResource {
     Server server;
 
     @Override
     protected void before() throws Throwable {
-        server = new JettyServerWithGuiceBuilder().build();
+        List<AbstractModule> modules = Arrays.asList(
+                new JerseyGuiceModule("__HK2_Generated_0"),
+                new ServletModule(),
+                new TestTodoModule());
+
+        server = new JettyServerWithGuiceBuilder().build(modules);
         server.start();
         while (!server.isStarted()) {
             System.out.println("waiting...");
