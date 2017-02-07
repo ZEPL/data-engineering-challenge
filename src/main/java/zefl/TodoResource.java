@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -54,15 +55,14 @@ public class TodoResource {
     @Path( "{todoId}/tasks/{taskId}" )
     public Task getTask(@PathParam("todoId") String todoId,@PathParam("taskId") String taskId) {
         LOGGER.info("GET /todos/{}/tasks/{}", todoId, taskId);
-        Todo todo = todoService.getTodo(todoId);
-        if (todo == null) {
-            throw new WebApplicationException(404);
-        }
-        Task task = todo.getTaskMap().get(taskId);
-        if (task == null) {
-            throw new WebApplicationException(404);
-        }
-        return task;
+        Optional<Todo> maybeTodo = todoService.getTodo(todoId);
+        return maybeTodo.map(todo -> {
+            Task task = todo.getTaskMap().get(taskId);
+            if (task == null) {
+                throw new WebApplicationException(404);
+            }
+            return task;
+        }).orElseThrow(() -> new WebApplicationException(404));
     }
 
     @DELETE
@@ -91,11 +91,9 @@ public class TodoResource {
     @GET
     @Path( "{id}/tasks" )
     public List<Task> getTasks(@PathParam("id") String id) {
-        Todo todo = todoService.getTodo(id);
-        if (todo == null) {
-            throw new WebApplicationException(404);
-        }
-        return new ArrayList<>(todo.getTaskMap().values());
+        Optional<Todo> maybeTodo = todoService.getTodo(id);
+        return maybeTodo.map( todo -> new ArrayList<>(todo.getTaskMap().values()))
+                .orElseThrow(() -> new WebApplicationException(404));
     }
 
     @GET
@@ -123,10 +121,10 @@ public class TodoResource {
     @POST
     @Path( "{id}/tasks" )
     public Task createTasks(@PathParam("id") String todoId, Map<String, String> data) {
-        Todo todo = todoService.getTodo(todoId);
-        if (todo == null) {
-            throw new WebApplicationException(404);
-        }
+
+        Optional<Todo> maybeTodo = todoService.getTodo(todoId);
+        maybeTodo.orElseThrow(() -> new WebApplicationException(404));
+
         String name = data.get("name");
         String description = data.get("description");
         Task newTask = todoService.createTask(todoId, name, description);

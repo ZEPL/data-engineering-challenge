@@ -1,6 +1,7 @@
 package zefl.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import zefl.domain.Task;
 import zefl.domain.Todo;
@@ -14,7 +15,7 @@ public interface TodoService {
     List<Todo> getTodos();
     Todo createTodo(String name);
 
-    Todo getTodo(String id);
+    Optional<Todo> getTodo(String id);
 
     Task createTask(String todoId, String name, String description);
 

@@ -2,6 +2,7 @@ package zefl.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -32,8 +33,9 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public Todo getTodo(String id) {
+    public Optional<Todo> getTodo(String id) {
         return todoDao.findTodoById(id);
+
     }
 
     @Override

@@ -1,6 +1,10 @@
 package zefl.dao;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import zefl.domain.Task;
 import zefl.domain.Todo;
@@ -10,15 +14,18 @@ public class TodoMemDAOImpl implements TodoDAO{
 
     @Override
     public boolean upsertTodo(Todo todo) {
-        // TODO param check
         todoMap.put(todo.getId(), todo);
         return true;
     }
 
     @Override
-    public Todo findTodoById(String id) {
-        // todo Optional?
-        return todoMap.get(id);
+    public Optional<Todo> findTodoById(String id) {
+        Todo result = todoMap.get(id);
+        if (result == null) {
+            return Optional.empty();
+        } else {
+            return Optional.of(result);
+        }
     }
 
     @Override
@@ -38,22 +45,20 @@ public class TodoMemDAOImpl implements TodoDAO{
 
     @Override
     public boolean upsertTask(String todoId, Task task) {
-        Todo todo = findTodoById(todoId);
-        if (todo == null) {
-            return false;
-        }
-        Map<String, Task> taskMap = todo.getTaskMap();
-        taskMap.put(task.getId(), task);
-        return true;
+        Optional<Todo> maybeTodo = findTodoById(todoId);
+
+        return maybeTodo.map( todo -> {
+            Map<String, Task> taskMap = todo.getTaskMap();
+            taskMap.put(task.getId(), task);
+            return true;
+        }).orElse(false);
     }
 
     @Override
     public Task findTaskBy(String todoId, String taskId) {
-        Todo todo = findTodoById(todoId);
-        if (todo == null) {
-            return null;
-        }
-        return todo.getTaskMap().get(taskId);
+        Optional<Todo> maybeTodo = findTodoById(todoId);
+        return maybeTodo.map(todo -> todo.getTaskMap().get(taskId))
+                .orElse(null);
     }
 
     @Override
@@ -63,11 +68,9 @@ public class TodoMemDAOImpl implements TodoDAO{
 
     @Override
     public boolean deleteTask(String todoId, String taskId) {
-        Todo todo = findTodoById(todoId);
-        if (todo == null) {
-            return false;
-        }
-        return todo.getTaskMap().remove(taskId) != null;
+        Optional<Todo> maybeTodo = findTodoById(todoId);
+        return maybeTodo.map(todo -> null != todo.getTaskMap().remove(taskId))
+                .orElse(false);
     }
 
     public static void resetData() {
