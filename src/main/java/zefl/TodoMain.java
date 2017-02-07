@@ -18,7 +18,11 @@ public class TodoMain {
     private static final Logger LOGGER = LoggerFactory.getLogger(TodoMain.class);
 
     public static void main(String[] args) throws Exception {
-        JettyServerWithGuiceBuilder serverBuilder = new JettyServerWithGuiceBuilder(8080);
+        int port = 8080;
+        if (args.length == 1 ) {
+            port = Integer.parseInt(args[0]);
+        }
+        JettyServerWithGuiceBuilder serverBuilder = new JettyServerWithGuiceBuilder(port);
         List<AbstractModule> modules = Arrays.asList(
                 new JerseyGuiceModule("__HK2_Generated_0"),
                 new ServletModule(),
