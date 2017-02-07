@@ -1,11 +1,16 @@
-package zefl;
-
-import com.google.inject.Inject;
+package zefl.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import com.google.inject.Inject;
+
+import zefl.domain.Task;
+import zefl.domain.Todo;
+import zefl.dao.TodoDAO;
+import zefl.util.Util;
 
 public class TodoServiceImpl implements TodoService {
     @Inject

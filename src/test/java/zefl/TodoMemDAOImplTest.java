@@ -10,6 +10,11 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import zefl.dao.TodoDAO;
+import zefl.dao.TodoMemDAOImpl;
+import zefl.domain.Task;
+import zefl.domain.Todo;
+
 public class TodoMemDAOImplTest {
     TodoDAO dao;
 

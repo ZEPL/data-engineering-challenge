@@ -1,10 +1,10 @@
-package zefl;
+package zefl.guice;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.servlet.GuiceFilter;
-import com.squarespace.jersey2.guice.JerseyGuiceUtils;
+import java.util.EnumSet;
+import java.util.List;
+
+import javax.servlet.DispatcherType;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -12,9 +12,11 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 
-import javax.servlet.DispatcherType;
-import java.util.EnumSet;
-import java.util.List;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.servlet.GuiceFilter;
+import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 
 public class JettyServerWithGuiceBuilder {
     private int port = 8080;

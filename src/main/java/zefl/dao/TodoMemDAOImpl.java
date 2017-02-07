@@ -1,6 +1,9 @@
-package zefl;
+package zefl.dao;
 
 import java.util.*;
+
+import zefl.domain.Task;
+import zefl.domain.Todo;
 
 public class TodoMemDAOImpl implements TodoDAO{
     static Map<String, Todo> todoMap = new HashMap<>();

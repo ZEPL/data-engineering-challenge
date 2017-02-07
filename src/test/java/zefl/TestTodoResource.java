@@ -1,5 +1,8 @@
 package zefl;
 
+import zefl.dao.TodoMemDAOImpl;
+import zefl.service.TodoServiceImpl;
+
 public class TestTodoResource extends TodoResource {
     //static TodoDAO dao = new TodoMemDAOImpl();
     public TestTodoResource() {

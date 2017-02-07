@@ -1,6 +1,9 @@
-package zefl;
+package zefl.dao;
 
 import java.util.List;
+
+import zefl.domain.Task;
+import zefl.domain.Todo;
 
 public interface TodoDAO {
     boolean upsertTodo(Todo todo);

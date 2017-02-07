@@ -14,6 +14,10 @@ import static org.glassfish.jersey.client.JerseyClientBuilder.createClient;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import zefl.domain.Task;
+import zefl.domain.Todo;
+import zefl.service.TodoService;
+
 public class SimpleIntegrationTodoResourceTest {
 
     @ClassRule

@@ -1,8 +1,10 @@
-package zefl;
+package zefl.domain;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Todo implements Serializable {
     private String id;
@@ -54,6 +56,7 @@ public class Todo implements Serializable {
         this.created = created;
     }
 
+    @JsonIgnore
     public Map<String, Task> getTaskMap() {
         return taskMap;
     }

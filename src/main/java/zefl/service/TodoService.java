@@ -1,6 +1,10 @@
-package zefl;
+package zefl.service;
 
 import java.util.List;
+
+import zefl.domain.Task;
+import zefl.domain.Todo;
+import zefl.dao.TodoDAO;
 
 public interface TodoService {
     // todo enum??

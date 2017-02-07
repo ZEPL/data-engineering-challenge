@@ -1,12 +1,15 @@
-package zefl;
-
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
+package zefl.dao;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+
+import zefl.domain.Task;
+import zefl.domain.Todo;
+import zefl.util.Util;
 
 public class TodoSimplePersistentDaoImpl extends TodoMemDAOImpl {
 

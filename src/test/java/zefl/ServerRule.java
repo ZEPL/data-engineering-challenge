@@ -9,6 +9,8 @@ import org.junit.rules.ExternalResource;
 import java.util.Arrays;
 import java.util.List;
 
+import zefl.guice.JettyServerWithGuiceBuilder;
+
 public class ServerRule extends ExternalResource {
     Server server;
 
