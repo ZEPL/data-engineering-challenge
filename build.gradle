@@ -5,9 +5,13 @@ apply plugin: 'java'
 
 sourceCompatibility = 1.8
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
+}
+
 task runApp(type: JavaExec) {
     main = 'zefl.TodoMain'
-    classpath = sourceSets.main.runtimeClasspath + files('config/')
+    classpath = sourceSets.main.runtimeClasspath
 }
 
 task fatJar(type: Jar) {
