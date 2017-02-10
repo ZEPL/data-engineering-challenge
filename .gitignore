@@ -1,3 +1,12 @@
+mvnw
+mvnw.cmd
+/target/*
+.classpath
+.project
+/.mvn/*
+/.settings/*
+/data/*
+
 *.class
 
 # Mobile Tools for Java (J2ME)
