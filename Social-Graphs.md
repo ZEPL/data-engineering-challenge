@@ -32,21 +32,25 @@ Suppose we have two users: UserA, and UserB.
 
 1. Find all first degree connections of UserA  (my direct friends). i.e.
 ```
+// Retrieve all friends of 'a'
 User[] getFriends(User a);
 ```
 
 2. Find if UserA and UserB are 1st degree connected (direct friends). 
 ```
+// Return true iff 'a' is a friend of 'b'
 boolean areFirstDegree(User a, User b);
 ```
 
 3. Find if UserA and UserB are 2nd degree connected (friends of friends). 
 ```
+// Return true iff 'a' is a friend of a friend of 'b'
 boolean areSecondDegree(User a, User b);
 ```
 
 4. Find if UserA and UserB are 3rd degree connected (friends of friends of friends). 
 ```
+// Return true iff 'a' is a friend of a friend of a friend of 'b'
 boolean areThirdDegree(User a, User b);
 ```
 
