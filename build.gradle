@@ -1,0 +1,44 @@
+group 'zefl'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
+}
+
+task runApp(type: JavaExec) {
+    main = 'zefl.TodoMain'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Todo server',
+                'Implementation-Version': '0.0.1',
+                'Main-Class': 'zefl.TodoMain'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile 'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-jetty:2.25.1'
+    compile 'org.glassfish.jersey.containers:jersey-container-jetty-http:2.25.1'
+    compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.25.1'
+    compile 'org.eclipse.jetty:jetty-servlet:9.2.14.v20151106'
+    compile 'com.google.inject:guice:4.1.0'
+    compile 'com.google.inject.extensions:guice-servlet:4.1.0'
+    compile 'com.squarespace.jersey2-guice:jersey2-guice-impl:1.0.6'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.22'
+    compile group: 'ch.qos.logback', name: 'logback-core', version: '1.0.13'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.0.13'
+}
