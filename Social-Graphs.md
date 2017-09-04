@@ -70,5 +70,7 @@ However, consider the following additional follow-up discussion questions:
 We're looking for completeness, cleanliness and reason behind your decisions. 
 Consider the representation of the graph and the efficiency of query and storage.
 
+If you have any questions, please send them to rpark@zepl.com.
+
 Thanks,
 And good luck!
