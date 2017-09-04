@@ -68,6 +68,7 @@ However, consider the following additional follow-up discussion questions:
 - How scalable is your app?
 - What would you do if there's now 10 M users?
 - What would you do if there's now 100 M users, and 100 friends per user on average?
+- Why did you choose your data storage?
 - How fault tolerant and available would the solution be?
 - How fast would it be?
 
